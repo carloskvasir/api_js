@@ -1,0 +1,12 @@
+# Ignorar diretórios de dependências
+node_modules
+vendor
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar diretórios de controle de versão
+.git
