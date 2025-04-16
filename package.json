@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "description": "API for the Web 2 class at UTFPR (Software Engineering).",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"No tests defined yet.\" && exit 0"
+    "start": "node .",
+    "dev": "nodemon ."
   },
   "keywords": [
     "api",
@@ -21,6 +22,8 @@
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
-
