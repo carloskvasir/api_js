@@ -1,27 +1,18 @@
 import express from 'express';
-import { Sequelize } from 'sequelize';
+import sequelize from './config/sequelize.js';
 import apiRouter from './routes.js';
 
 const app = express();
 
-const postgres_url = 'postgres://admin:admin@localhost:5432/testdb';
+// Verifica a conexão com o banco ao iniciar a aplicação
+try {
+  await sequelize.authenticate();
+  const [results] = await sequelize.query('SELECT version()');
+  console.log('Database version:', results[0].version);
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
 
-const sequelize = new Sequelize(postgres_url, {
-  dialect: 'postgres',
-  logging: false,
-});
-
-// Check database connection and version
-sequelize.authenticate()
-  .then(() => sequelize.query('SELECT version();'))
-  .then(([results]) => {
-    console.log('Database version:', results[0].version);
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
-
-/* ───────────────────────  GLOBAL MIDDLEWARE  ──────────────────────── */
 app.use(express.json());
 app.use('/', apiRouter);
 

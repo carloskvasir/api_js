@@ -9,7 +9,7 @@ router.use((req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
 
-router.use((err, req, res, next) => {
+router.use((err, req, res) => {
   console.error(err);
   res.status(500).json({ error: 'Internal server error' });
 });
