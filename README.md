@@ -1,14 +1,10 @@
-# API JS
+# PetMatch API
 
-A simple API for practicing backend fundamentals, developed for the Web 2 course in the Software Engineering program at UTFPR.
-
-## Preview
-
-![API Preview](print_exec.png)
+A REST API for an animal adoption platform, developed for the Web 2 course in the Software Engineering program at UTFPR.
 
 ## About the Project
 
-This project implements a REST API using Node.js and Express, serving as a foundation to explore fundamental backend development concepts. It includes examples of routes, middlewares, and data handling.
+This API serves as the backend for a platform that connects animal shelters and independent protectors with people interested in adopting pets. It enables the registration of animals available for adoption, manages adoption applications, and facilitates the matching process between pets and potential adopters.
 
 ## Technologies Used
 
@@ -41,24 +37,30 @@ This project implements a REST API using Node.js and Express, serving as a found
 
 ## Available Endpoints
 
-### GET /hello
-Returns a simple JSON response to verify the API is working correctly.
+### Pets
+- `GET /pets` - List all available pets
+- `GET /pets/:id` - Get details of a specific pet
+- `POST /pets` - Register a new pet for adoption
+- `PUT /pets/:id` - Update pet information
+- `DELETE /pets/:id` - Remove a pet listing
 
-**Example Request:**
-```bash
-curl -X GET http://localhost:3000/hello
-```
+### Shelters/Protectors
+- `GET /shelters` - List all registered shelters/protectors
+- `POST /shelters` - Register new shelter/protector
+- `PUT /shelters/:id` - Update shelter/protector information
 
-**Example Response:**
-```json
-{
-  "message": "Welcome to @caloskvasir's Express API!"
-}
-```
+### Adoption Applications
+- `POST /adoptions` - Submit adoption application
+- `GET /adoptions/:id` - Check application status
+- `PUT /adoptions/:id` - Update application status
 
 ## Development Roadmap
 
-- [x] Implement basic `/hello` endpoint (smoke test) — ✅ 28/03/25
+- [ ] Basic CRUD for pets
+- [ ] Shelter/protector registration system
+- [ ] Adoption application workflow
+- [ ] Pet search and filtering
+- [ ] Image upload for pets
 
 ## License
 This project is licensed under the Mozilla Public License 2.0 (MPL-2.0).
