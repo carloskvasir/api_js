@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon .",
+    "dev": "nodemon --ext js,json,handlebars,hbs .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "db:create": "sequelize-cli db:create --config config/database.cjs",
@@ -14,7 +14,6 @@
     "db:migrate": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate",
     "db:migrate:undo": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate:undo",
     "db:seed": "sequelize-cli db:seed:all --config config/database.cjs"
- 
   },
   "keywords": [
     "api",
@@ -29,7 +28,10 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.5",
     "express": "^4.18.2",
+    "express-handlebars": "^8.0.2",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7"

@@ -1,0 +1,97 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Editar Usuário</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/users" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{#if error}}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {{/if}}
+
+            <form action="/users/{{user.id}}" method="POST" onsubmit="return validatePasswords()">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="name" name="name" 
+                           value="{{user.name}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           value="{{user.email}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" 
+                           value="{{user.phone}}">
+                </div>
+
+                <hr>
+                <h5>Alterar Senha</h5>
+                <p class="text-muted small">Deixe em branco para manter a senha atual</p>
+
+                <div class="mb-3">
+                    <label for="currentPassword" class="form-label">Senha Atual</label>
+                    <input type="password" class="form-control" id="currentPassword" 
+                           name="currentPassword">
+                </div>
+
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Nova Senha</label>
+                    <input type="password" class="form-control" id="newPassword" 
+                           name="newPassword" minlength="6">
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirmar Nova Senha</label>
+                    <input type="password" class="form-control" id="confirmPassword" 
+                           name="confirmPassword" minlength="6">
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <a href="/users/{{user.id}}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function validatePasswords() {
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    // Se algum campo de senha estiver preenchido, todos devem estar
+    if (newPassword || confirmPassword || currentPassword) {
+        if (!currentPassword) {
+            alert('Digite a senha atual para confirmar as alterações');
+            return false;
+        }
+        if (!newPassword || !confirmPassword) {
+            alert('Preencha todos os campos de senha');
+            return false;
+        }
+        if (newPassword !== confirmPassword) {
+            alert('As senhas não coincidem');
+            return false;
+        }
+        if (newPassword.length < 6) {
+            alert('A nova senha deve ter pelo menos 6 caracteres');
+            return false;
+        }
+    }
+    return true;
+}
+</script>

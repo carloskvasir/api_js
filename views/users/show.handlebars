@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Detalhes do Usuário</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/users" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>ID:</strong></div>
+                <div class="col-md-9">{{user.id}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Nome:</strong></div>
+                <div class="col-md-9">{{user.name}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Email:</strong></div>
+                <div class="col-md-9">{{user.email}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Telefone:</strong></div>
+                <div class="col-md-9">{{user.phone}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Criado em:</strong></div>
+                <div class="col-md-9">{{user.createdAt}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Atualizado em:</strong></div>
+                <div class="col-md-9">{{user.updatedAt}}</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex gap-2">
+                <a href="/users/{{user.id}}/edit" class="btn btn-primary">Editar</a>
+                <form action="/users/{{user.id}}/delete" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger" 
+                            onclick="return confirm('Tem certeza que deseja excluir?')">
+                        Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

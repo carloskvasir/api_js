@@ -1,0 +1,19 @@
+<div class="jumbotron">
+    <h1 class="display-4">Bem-vindo ao {{title}}!</h1>
+    <p class="lead">Sistema de gerenciamento de adoção de pets.</p>
+    <hr class="my-4">
+    <p>Escolha uma das opções abaixo para começar:</p>
+    <div class="row">
+        {{#each features}}
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <p class="card-text">{{this.description}}</p>
+                    <a href="{{this.path}}" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
