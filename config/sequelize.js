@@ -1,22 +1,19 @@
 import { Sequelize } from 'sequelize';
+import config from './database.cjs';
 
-const postgres_url = 'postgres://admin:admin@localhost:5432/testdb';
+const env = process.env.NODE_ENV || 'development';
+const dbConfig = config[env];
 
-const sequelize = new Sequelize(postgres_url, {
-  dialect: 'postgres',
-  logging: false,
-});
-
-// Check database connection and version
-sequelize.authenticate()
-  .then(async () => {
-    console.log('\x1b[32m%s\x1b[0m', '✅ OK postgres'); // Green success
-    const [results] = await sequelize.query('SELECT version()');
-    console.log('Postgres version:', results[0].version);
-  })
-  .catch(err => {
-    console.error('\x1b[31m%s\x1b[0m', '❌ FAIL postgres'); // Red error
-    console.error(err.message || err);
-  });
+const sequelize = new Sequelize(
+  dbConfig.database,
+  dbConfig.username,
+  dbConfig.password,
+  {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    port: dbConfig.port,
+    ...dbConfig.define
+  }
+);
 
 export default sequelize;
