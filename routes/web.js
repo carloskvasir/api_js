@@ -1,4 +1,5 @@
 import express from 'express';
+import * as petController from '../controllers/web/petController.js';
 import * as shelterController from '../controllers/web/shelterController.js';
 import * as userController from '../controllers/web/userController.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
@@ -10,8 +11,9 @@ router.get('/', (req, res) => {
   res.render('home', {
     title: 'PetMatch',
     features: [
-      { name: 'Usuários', path: '/users', description: 'Gerencie os usuários do sistema' },
-      { name: 'Abrigos', path: '/shelters', description: 'Gerencie os abrigos parceiros' },
+      { name: 'Usuários', path: '/users', description: 'Gerencie cadastros e informações dos usuários da plataforma' },
+      { name: 'Abrigos', path: '/shelters', description: 'Cadastre e administre abrigos parceiros, suas localizações e informações de contato' },
+      { name: 'Pets', path: '/pets', description: 'Cadastre animais disponíveis para adoção, incluindo fotos, características e histórico médico' },
     ]
   });
 });
@@ -36,9 +38,20 @@ shelterRouter.get('/:id/edit', shelterController.edit);
 shelterRouter.put('/:id', shelterController.update);
 shelterRouter.delete('/:id', shelterController.destroy);
 
+// Create pet routes router
+const petRouter = express.Router();
+petRouter.get('/', petController.index);
+petRouter.get('/new', petController.create);
+petRouter.post('/', petController.store);
+petRouter.get('/:id', petController.show);
+petRouter.get('/:id/edit', petController.edit);
+petRouter.put('/:id', petController.update);
+petRouter.delete('/:id', petController.destroy);
+
 // Mount resource routers
 router.use('/users', userRouter);
 router.use('/shelters', shelterRouter);
+router.use('/pets', petRouter);
 
 // Error handling
 router.use(notFoundHandler);

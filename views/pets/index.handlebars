@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/pets/new" class="btn btn-primary">Novo Pet</a>
+        </div>
+    </div>
+
+    {{#if error}}
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
+    {{/if}}
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {{#if pets.length}}
+            {{#each pets}}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this.species}} - {{this.breed}}</h6>
+                        <p class="card-text">{{this.description}}</p>
+                        <ul class="list-unstyled">
+                            <li><strong>Idade:</strong> {{this.age}} ano(s)</li>
+                            <li><strong>Status:</strong> 
+                                <span class="badge {{#if (eq this.status 'available')}}bg-success{{else if (eq this.status 'pending')}}bg-warning{{else}}bg-secondary{{/if}}">
+                                    {{this.status}}
+                                </span>
+                            </li>
+                            <li><strong>Abrigo:</strong> {{this.Shelter.name}}</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex gap-2">
+                            <a href="{{this.viewUrl}}" class="btn btn-info flex-grow-1">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+                            <a href="{{this.editUrl}}" class="btn btn-warning flex-grow-1">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <form action="{{this.deleteUrl}}?_method=DELETE" method="POST" class="flex-grow-1">
+                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Tem certeza que deseja excluir este pet?')">
+                                    <i class="bi bi-trash"></i> Excluir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        {{else}}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Nenhum pet cadastrado
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</div>

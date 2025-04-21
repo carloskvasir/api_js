@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Detalhes do Pet</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/pets" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Nome:</strong></div>
+                <div class="col-md-9">{{pet.name}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Espécie:</strong></div>
+                <div class="col-md-9">{{pet.species}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Raça:</strong></div>
+                <div class="col-md-9">{{pet.breed}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Idade:</strong></div>
+                <div class="col-md-9">{{pet.age}} ano(s)</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Descrição:</strong></div>
+                <div class="col-md-9">{{pet.description}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Status:</strong></div>
+                <div class="col-md-9">
+                    <span class="badge {{#if (eq pet.status 'available')}}bg-success{{else if (eq pet.status 'pending')}}bg-warning{{else}}bg-secondary{{/if}}">
+                        {{pet.status}}
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Abrigo:</strong></div>
+                <div class="col-md-9">
+                    {{pet.Shelter.name}} ({{pet.Shelter.email}})
+                    <br>
+                    <small class="text-muted">Telefone: {{pet.Shelter.phone}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex gap-2">
+                <a href="/pets/{{pet.id}}/edit" class="btn btn-primary">Editar</a>
+                <form action="/pets/{{pet.id}}?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?')">
+                        Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
