@@ -1,4 +1,5 @@
 import express from 'express';
+import * as adoptionRequestController from '../controllers/web/adoptionRequestController.js';
 import * as petController from '../controllers/web/petController.js';
 import * as shelterController from '../controllers/web/shelterController.js';
 import * as userController from '../controllers/web/userController.js';
@@ -14,6 +15,7 @@ router.get('/', (req, res) => {
       { name: 'Usuários', path: '/users', description: 'Gerencie cadastros e informações dos usuários da plataforma' },
       { name: 'Abrigos', path: '/shelters', description: 'Cadastre e administre abrigos parceiros, suas localizações e informações de contato' },
       { name: 'Pets', path: '/pets', description: 'Cadastre animais disponíveis para adoção, incluindo fotos, características e histórico médico' },
+      { name: 'Adoções', path: '/adoptions', description: 'Gerencie solicitações de adoção, incluindo aprovação, rejeição e acompanhamento' },
     ]
   });
 });
@@ -48,10 +50,21 @@ petRouter.get('/:id/edit', petController.edit);
 petRouter.put('/:id', petController.update);
 petRouter.delete('/:id', petController.destroy);
 
+// Create adoption request routes router
+const adoptionRouter = express.Router();
+adoptionRouter.get('/', adoptionRequestController.index);
+adoptionRouter.get('/new', adoptionRequestController.create);
+adoptionRouter.post('/', adoptionRequestController.store);
+adoptionRouter.get('/:id', adoptionRequestController.show);
+adoptionRouter.get('/:id/edit', adoptionRequestController.edit);
+adoptionRouter.put('/:id', adoptionRequestController.update);
+adoptionRouter.delete('/:id', adoptionRequestController.destroy);
+
 // Mount resource routers
 router.use('/users', userRouter);
 router.use('/shelters', shelterRouter);
 router.use('/pets', petRouter);
+router.use('/adoptions', adoptionRouter);
 
 // Error handling
 router.use(notFoundHandler);
