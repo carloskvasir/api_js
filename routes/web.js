@@ -1,4 +1,5 @@
 import express from 'express';
+import * as shelterController from '../controllers/web/shelterController.js';
 import * as userController from '../controllers/web/userController.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
 
@@ -10,21 +11,34 @@ router.get('/', (req, res) => {
     title: 'PetMatch',
     features: [
       { name: 'Usuários', path: '/users', description: 'Gerencie os usuários do sistema' },
-      { name: 'Cadastrar Usuário', path: '/users/new', description: 'Registre novos usuários' }
+      { name: 'Abrigos', path: '/shelters', description: 'Gerencie os abrigos parceiros' },
     ]
   });
 });
 
-// User routes - HTML views
-router.get('/users', userController.index);
-router.get('/users/new', userController.create);
-router.get('/users/:id', userController.show);
-router.get('/users/:id/edit', userController.edit);
+// Create user routes router
+const userRouter = express.Router();
+userRouter.get('/', userController.index);
+userRouter.get('/new', userController.create);
+userRouter.post('/', userController.store);
+userRouter.get('/:id', userController.show);
+userRouter.get('/:id/edit', userController.edit);
+userRouter.put('/:id', userController.update);
+userRouter.delete('/:id', userController.destroy);
 
-// User routes - Form submissions
-router.post('/users', userController.store);
-router.put('/users/:id', userController.update);
-router.delete('/users/:id', userController.destroy);
+// Create shelter routes router
+const shelterRouter = express.Router();
+shelterRouter.get('/', shelterController.index);
+shelterRouter.get('/new', shelterController.create);
+shelterRouter.post('/', shelterController.store);
+shelterRouter.get('/:id', shelterController.show);
+shelterRouter.get('/:id/edit', shelterController.edit);
+shelterRouter.put('/:id', shelterController.update);
+shelterRouter.delete('/:id', shelterController.destroy);
+
+// Mount resource routers
+router.use('/users', userRouter);
+router.use('/shelters', shelterRouter);
 
 // Error handling
 router.use(notFoundHandler);

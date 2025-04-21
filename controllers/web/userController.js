@@ -7,9 +7,12 @@ export const index = async (req, res) => {
     const plainUsers = users.map(user => ({
       ...user.get({ plain: true }),
       viewUrl: `/users/${user.id}`,
-      editUrl: `/users/${user.id}/edit`
+      editUrl: `/users/${user.id}/edit`,
+      deleteUrl: `/users/${user.id}`
     }));
-    res.render('users/index', { title: 'Usuários', users: plainUsers });
+    res.render('users/index', {
+      title: 'Usuários',
+      users: plainUsers });
   } catch (error) {
     res.status(500).render('shared/error', { error: error.message });
   }

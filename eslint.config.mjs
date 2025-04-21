@@ -1,10 +1,10 @@
+import babelParser from '@babel/eslint-parser';
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
-import babelParser from '@babel/eslint-parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +32,6 @@ export default defineConfig([{
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'no-unused-vars': 'warn',
+    'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
   },
 }]);

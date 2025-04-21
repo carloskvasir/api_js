@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/shelters/new" class="btn btn-primary">Novo Abrigo</a>
+        </div>
+    </div>
+
+    {{#if error}}
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
+    {{/if}}
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr class="table-dark">
+                    <th class="px-3">Nome</th>
+                    <th class="px-3">Endereço</th>
+                    <th class="px-3">Telefone</th>
+                    <th class="px-3">Email</th>
+                    <th class="px-3" style="width: 140px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if shelters.length}}
+                    {{#each shelters}}
+                    <tr>
+                        <td class="px-3">{{this.name}}</td>
+                        <td class="px-3">{{this.address}}</td>
+                        <td class="px-3">{{this.phone}}</td>
+                        <td class="px-3">{{this.email}}</td>
+                        <td class="px-3 text-nowrap">
+                            <a href="{{this.viewUrl}}" class="btn btn-info btn-sm me-1">Ver</a>
+                            <a href="{{this.editUrl}}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{this.deleteUrl}}?_method=DELETE" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                {{else}}
+                    <tr>
+                        <td colspan="6" class="text-center py-3">Nenhum abrigo cadastrado</td>
+                    </tr>
+                {{/if}}
+            </tbody>
+        </table>
+    </div>
+</div>

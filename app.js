@@ -7,7 +7,13 @@ import webRouter from './routes/web.js';
 const app = express();
 
 // Configuração do Handlebars
-app.engine('handlebars', engine());
+app.engine('handlebars', engine({
+  helpers: {
+    eq: function (a, b) {
+      return a === b;
+    }
+  }
+}));
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 

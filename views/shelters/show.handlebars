@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Detalhes do Abrigo</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/shelters" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Nome:</strong></div>
+                <div class="col-md-9">{{shelter.name}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Endereço:</strong></div>
+                <div class="col-md-9">{{shelter.address}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Email:</strong></div>
+                <div class="col-md-9">{{shelter.email}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Telefone:</strong></div>
+                <div class="col-md-9">{{shelter.phone}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Descrição:</strong></div>
+                <div class="col-md-9">{{shelter.description}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Responsável:</strong></div>
+                <div class="col-md-9">{{shelter.User.name}} ({{shelter.User.email}})</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Criado em:</strong></div>
+                <div class="col-md-9">{{shelter.createdAt}}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Atualizado em:</strong></div>
+                <div class="col-md-9">{{shelter.updatedAt}}</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex gap-2">
+                <a href="/shelters/{{shelter.id}}/edit" class="btn btn-primary">Editar</a>
+                <form action="/shelters/{{shelter.id}}/delete" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger" 
+                            onclick="return confirm('Tem certeza que deseja excluir?')">
+                        Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,7 +13,8 @@
     "db:drop": "sequelize-cli db:drop --config config/database.cjs",
     "db:migrate": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate",
     "db:migrate:undo": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate:undo",
-    "db:seed": "sequelize-cli db:seed:all --config config/database.cjs"
+    "db:seed": "sequelize-cli db:seed:all --config config/database.cjs",
+    "db:setup": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed"
   },
   "keywords": [
     "api",

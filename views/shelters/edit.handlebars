@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Editar Abrigo</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/shelters" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{#if error}}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {{/if}}
+
+            <form action="/shelters/{{shelter.id}}" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="name" name="name" 
+                           value="{{shelter.name}}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="address" class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="address" name="address" 
+                           value="{{shelter.address}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           value="{{shelter.email}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" 
+                           value="{{shelter.phone}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="description" name="description" 
+                              rows="3">{{shelter.description}}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="userId" class="form-label">Responsável</label>
+                    <select class="form-select" id="userId" name="userId" required>
+                        <option value="">Selecione um responsável</option>
+                        {{#each users}}
+                        <option value="{{this.id}}" {{#if (eq ../shelter.userId this.id)}}selected{{/if}}>
+                            {{this.name}} ({{this.email}})
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <a href="/shelters/{{shelter.id}}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
