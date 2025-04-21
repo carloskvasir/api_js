@@ -31,6 +31,54 @@ export async function up(queryInterface) {
       password: 'password',
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      name: 'Marina Santos Silva',
+      email: 'marina.silva@email.com',
+      phone: '11988776655',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: 'Rafael Oliveira Costa',
+      email: 'rafael.costa@email.com',
+      phone: '21977665544',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: 'Julia Pereira Santos',
+      email: 'julia.pereira@email.com',
+      phone: '31966554433',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: 'Lucas Ferreira Lima',
+      email: 'lucas.lima@email.com',
+      phone: '41955443322',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: 'Beatriz Almeida Rocha',
+      email: 'beatriz.rocha@email.com',
+      phone: '51944332211',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: 'Gabriel Mendes Costa',
+      email: 'gabriel.costa@email.com',
+      phone: '61933221100',
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ], {});
 }
