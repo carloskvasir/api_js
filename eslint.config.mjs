@@ -33,5 +33,26 @@ export default defineConfig([{
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+    // Regras para consistência de módulos
+    'prefer-const': 'error',
+    'no-var': 'error',
+    'object-shorthand': 'error',
+  },
+}, {
+  // Configuração específica para arquivos .cjs (migrações e seeders)
+  files: ['**/*.cjs'],
+  languageOptions: {
+    sourceType: 'script',
+    globals: {
+      ...globals.node,
+      module: 'readonly',
+      exports: 'readonly',
+      require: 'readonly',
+    },
+  },
+  rules: {
+    // Permitir require() em arquivos .cjs
+    'prefer-const': 'error',
+    'no-var': 'error',
   },
 }]);

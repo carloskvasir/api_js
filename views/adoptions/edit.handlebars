@@ -17,7 +17,7 @@
             </div>
             {{/if}}
 
-            <form action="/adoptions/{{adoptionRequest.id}}?_method=PUT" method="POST">
+            <form action="/adoptions/{{adoptionRequest.id}}/edit" method="POST">
                 <div class="mb-3">
                     <label for="petId" class="form-label">Pet</label>
                     <select class="form-select" id="petId" name="petId" required>

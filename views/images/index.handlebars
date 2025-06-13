@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/images/new" class="btn btn-primary">Nova Imagem</a>
+        </div>
+    </div>
+
+    {{#if error}}
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
+    {{/if}}
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {{#if images.length}}
+            {{#each images}}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pet: {{this.Pet.name}}</h5>
+                        <p class="card-text">
+                            <strong>URL da Imagem:</strong><br>
+                            <code style="font-size: 0.85em; word-break: break-all; background-color: #f8f9fa; padding: 8px; border-radius: 4px; display: block;">{{this.url}}</code>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">ID: {{this.id}} | Criado: {{this.createdAt}}</small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex gap-2">
+                            <a href="{{this.viewUrl}}" class="btn btn-info flex-grow-1">Ver</a>
+                            <a href="{{this.editUrl}}" class="btn btn-warning flex-grow-1">Editar</a>
+                            <form action="/images/{{this.id}}/delete" method="POST" class="flex-grow-1">
+                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Tem certeza?')">
+                                    Excluir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        {{else}}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Nenhuma imagem cadastrada
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</div>

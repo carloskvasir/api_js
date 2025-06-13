@@ -1,6 +1,6 @@
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Shelters', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,32 +11,18 @@ export default {
         type: Sequelize.STRING,
         allowNull: false
       },
-      address: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      phone: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
-      description: {
-        type: Sequelize.TEXT,
-        allowNull: true
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -50,6 +36,6 @@ export default {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Shelters');
+    await queryInterface.dropTable('Users');
   }
 };

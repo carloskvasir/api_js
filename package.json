@@ -9,11 +9,11 @@
     "dev": "nodemon --ext js,json,handlebars,hbs .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "db:create": "sequelize-cli db:create --config config/database.cjs",
-    "db:drop": "sequelize-cli db:drop --config config/database.cjs",
-    "db:migrate": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate",
-    "db:migrate:undo": "sequelize-cli --config config/database.cjs --migrations-path migrations --seeders-path seeders --models-path models db:migrate:undo",
-    "db:seed": "sequelize-cli db:seed:all --config config/database.cjs",
+    "db:create": "sequelize-cli db:create --config config/database.js",
+    "db:drop": "sequelize-cli db:drop --config config/database.js",
+    "db:migrate": "sequelize-cli --config config/database.js --migrations-path migrations --seeders-path seeders --models-path models db:migrate",
+    "db:migrate:undo": "sequelize-cli --config config/database.js --migrations-path migrations --seeders-path seeders --models-path models db:migrate:undo",
+    "db:seed": "sequelize-cli db:seed:all --config config/database.js",
     "db:setup": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed"
   },
   "keywords": [

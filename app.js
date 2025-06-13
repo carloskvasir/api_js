@@ -9,7 +9,7 @@ const app = express();
 // Configuração do Handlebars
 app.engine('handlebars', engine({
   helpers: {
-    eq: function (a, b) {
+    eq (a, b) {
       return a === b;
     }
   }

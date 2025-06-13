@@ -51,7 +51,7 @@
         <div class="card-footer">
             <div class="d-flex gap-2">
                 <a href="/pets/{{pet.id}}/edit" class="btn btn-primary">Editar</a>
-                <form action="/pets/{{pet.id}}?_method=DELETE" method="POST" class="d-inline">
+                <form action="/pets/{{pet.id}}/delete" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?')">
                         Excluir
                     </button>

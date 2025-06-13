@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import config from './database.cjs';
+import config from './database.js';
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
@@ -12,6 +12,7 @@ const sequelize = new Sequelize(
     host: dbConfig.host,
     dialect: dbConfig.dialect,
     port: dbConfig.port,
+    logging: dbConfig.logging,
     ...dbConfig.define
   }
 );

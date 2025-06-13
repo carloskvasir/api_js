@@ -17,7 +17,7 @@
             </div>
             {{/if}}
 
-            <form action="/users/{{user.id}}" method="POST" onsubmit="return validatePasswords()">
+            <form action="/users/{{user.id}}/edit" method="POST" onsubmit="return validatePasswords()">
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="name" name="name" 

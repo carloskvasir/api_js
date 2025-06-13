@@ -41,7 +41,7 @@
                             <a href="{{this.editUrl}}" class="btn btn-warning flex-grow-1">
                                 <i class="bi bi-pencil"></i> Editar
                             </a>
-                            <form action="{{this.deleteUrl}}?_method=DELETE" method="POST" class="flex-grow-1">
+                            <form action="/pets/{{this.id}}/delete" method="POST" class="flex-grow-1">
                                 <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Tem certeza que deseja excluir este pet?')">
                                     <i class="bi bi-trash"></i> Excluir
                                 </button>

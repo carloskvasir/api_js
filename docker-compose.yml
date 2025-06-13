@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db:
-    image: postgres:16-alpine   # Alpine Linux
+    image: postgres:16-alpine
     container_name: api_postgres
     ports:
       - "5432:5432"
@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: petmatch_dev
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  postgres_data:

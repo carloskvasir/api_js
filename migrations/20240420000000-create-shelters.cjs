@@ -1,21 +1,32 @@
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('AdoptionRequests', {
+    await queryInterface.createTable('Shelters', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      petId: {
-        type: Sequelize.INTEGER,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: 'Pets',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        unique: true
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -26,14 +37,6 @@ export default {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      },
-      status: {
-        type: Sequelize.ENUM('pending', 'approved', 'rejected'),
-        defaultValue: 'pending'
-      },
-      note: {
-        type: Sequelize.TEXT,
-        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +50,6 @@ export default {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('AdoptionRequests');
+    await queryInterface.dropTable('Shelters');
   }
 };

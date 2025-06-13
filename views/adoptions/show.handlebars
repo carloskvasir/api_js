@@ -57,7 +57,7 @@
         <div class="card-footer">
             <div class="d-flex gap-2">
                 <a href="/adoptions/{{adoptionRequest.id}}/edit" class="btn btn-primary">Editar</a>
-                <form action="/adoptions/{{adoptionRequest.id}}?_method=DELETE" method="POST" class="d-inline">
+                <form action="/adoptions/{{adoptionRequest.id}}/delete" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta solicitação?')">
                         Excluir
                     </button>

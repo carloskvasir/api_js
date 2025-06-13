@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h2>Editar Imagem</h2>
+                </div>
+                <div class="col text-end">
+                    <a href="/images" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{#if error}}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {{/if}}
+
+            <form action="/images/{{image.id}}/edit" method="POST">
+                <div class="mb-3">
+                    <label for="petId" class="form-label">Pet</label>
+                    <select class="form-select" id="petId" name="petId" required>
+                        <option value="">Selecione um pet</option>
+                        {{#each pets}}
+                        <option value="{{this.id}}" {{#if (eq this.id ../image.petId)}}selected{{/if}}>
+                            {{this.name}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="url" class="form-label">URL *</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="url" name="url" 
+                               value="{{image.url}}" required
+                               placeholder="https://exemplo.com/arquivo">
+                        <button class="btn btn-outline-secondary" type="button" onclick="testUrl()">
+                            🔍 Testar
+                        </button>
+                    </div>
+                    <small class="text-muted">Texto/URL</small>
+                    
+                    <!-- Prévia -->
+                    <div id="urlPreview" class="mt-2"></div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-text">
+                        <strong>URL Atual:</strong><br>
+                        <code style="word-break: break-all;">{{image.url}}</code>
+                        {{#if image.url}}
+                            <a href="{{image.url}}" target="_blank" class="btn btn-sm btn-link ms-2">Abrir</a>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <a href="/images/{{image.id}}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function testUrl() {
+    const urlInput = document.getElementById('url');
+    const preview = document.getElementById('urlPreview');
+    const url = urlInput.value.trim();
+    
+    if (!url) {
+        alert('Por favor, insira um texto primeiro');
+        return;
+    }
+    
+    preview.innerHTML = `
+        <div class="alert alert-success">
+            <strong>✅ Texto definido!</strong><br>
+            <small>Conteúdo: <code>${url}</code></small>
+            <div class="mt-2">
+                <a href="${url}" target="_blank" class="btn btn-sm btn-outline-primary">
+                    Abrir como link
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+// Teste automático quando a URL for alterada
+document.getElementById('url').addEventListener('blur', function() {
+    if (this.value.trim() && this.value !== '{{image.url}}') {
+        testUrl();
+    }
+});
+
+// Validação no envio do formulário
+document.querySelector('form').addEventListener('submit', function(e) {
+    const urlInput = document.getElementById('url');
+    const url = urlInput.value.trim();
+    
+    if (!url) {
+        e.preventDefault();
+        alert('Por favor, forneça um texto');
+        urlInput.focus();
+        return false;
+    }
+});
+</script>
