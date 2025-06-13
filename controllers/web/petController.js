@@ -1,12 +1,14 @@
-import Pet from '../../models/Pet.js';
-import Shelter from '../../models/Shelter.js';
-import Tag from '../../models/Tag.js';
+import { Pet, Shelter, Tag } from '../../models/index.js';
 
 export const index = async (req, res) => {
   try {
     const pets = await Pet.findAll({
       include: [
-        { model: Shelter, attributes: ['name'] },
+        { 
+          model: Shelter, 
+          as: 'shelter',
+          attributes: ['name'] 
+        },
         { 
           model: Tag, 
           as: 'tags',
@@ -35,7 +37,11 @@ export const show = async (req, res) => {
   try {
     const pet = await Pet.findByPk(req.params.id, {
       include: [
-        { model: Shelter, attributes: ['name', 'email', 'phone'] },
+        { 
+          model: Shelter, 
+          as: 'shelter',
+          attributes: ['name', 'email', 'phone'] 
+        },
         { 
           model: Tag, 
           as: 'tags',

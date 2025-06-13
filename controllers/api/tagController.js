@@ -1,8 +1,6 @@
 import { Op } from 'sequelize';
 import sequelize from '../../config/sequelize.js';
-import Pet from '../../models/Pet.js';
-import PetTag from '../../models/PetTag.js';
-import Tag from '../../models/Tag.js';
+import { Pet, PetTag, Tag } from '../../models/index.js';
 
 // Listar todos os pets com suas tags
 export const getPetsWithTags = async (req, res) => {

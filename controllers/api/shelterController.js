@@ -1,4 +1,4 @@
-import Shelter from '../../models/Shelter.js';
+import { Shelter } from '../../models/index.js';
 
 export const getAllShelters = async (req, res) => {
   try {
