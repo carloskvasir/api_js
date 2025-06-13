@@ -1,8 +1,10 @@
 import express from 'express';
-import * as petController from '../controllers/api/petController.js';
-import * as shelterController from '../controllers/api/shelterController.js';
-import * as tagController from '../controllers/api/tagController.js';
-import * as userController from '../controllers/api/userController.js';
+import {
+  petController,
+  shelterController,
+  tagController,
+  userController
+} from '../controllers/api/index.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
 
 const router = express.Router();
