@@ -1,11 +1,13 @@
 import express from 'express';
-import * as adoptionRequestController from '../controllers/web/adoptionRequestController.js';
-import * as petController from '../controllers/web/petController.js';
-import * as shelterController from '../controllers/web/shelterController.js';
-import * as tagController from '../controllers/web/tagController.js';
-import * as userController from '../controllers/web/userController.js';
+import {
+  adoptionRequestController,
+  imageController,
+  petController,
+  shelterController,
+  tagController,
+  userController
+} from '../controllers/web/index.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
-import imageRoutes from './web/imageRoutes.js';
 
 const router = express.Router();
 
@@ -32,7 +34,7 @@ userRouter.post('/', userController.store);
 userRouter.get('/:id', userController.show);
 userRouter.get('/:id/edit', userController.edit);
 userRouter.post('/:id/edit', userController.update);
-userRouter.post('/:id/delete', userController.destroy);
+userRouter.get('/:id/delete', userController.destroy);
 
 // Create shelter routes router
 const shelterRouter = express.Router();
@@ -42,7 +44,7 @@ shelterRouter.post('/', shelterController.store);
 shelterRouter.get('/:id', shelterController.show);
 shelterRouter.get('/:id/edit', shelterController.edit);
 shelterRouter.post('/:id/edit', shelterController.update);
-shelterRouter.post('/:id/delete', shelterController.destroy);
+shelterRouter.get('/:id/delete', shelterController.destroy);
 
 // Create pet routes router
 const petRouter = express.Router();
@@ -52,7 +54,7 @@ petRouter.post('/', petController.store);
 petRouter.get('/:id', petController.show);
 petRouter.get('/:id/edit', petController.edit);
 petRouter.post('/:id/edit', petController.update);
-petRouter.post('/:id/delete', petController.destroy);
+petRouter.get('/:id/delete', petController.destroy);
 // Rotas para gerenciar tags de pets
 petRouter.post('/:id/tags', petController.addTag);
 petRouter.post('/:id/tags/remove', petController.removeTag);
@@ -65,7 +67,7 @@ adoptionRouter.post('/', adoptionRequestController.store);
 adoptionRouter.get('/:id', adoptionRequestController.show);
 adoptionRouter.get('/:id/edit', adoptionRequestController.edit);
 adoptionRouter.post('/:id/edit', adoptionRequestController.update);
-adoptionRouter.post('/:id/delete', adoptionRequestController.destroy);
+adoptionRouter.get('/:id/delete', adoptionRequestController.destroy);
 
 // Create tag routes router
 const tagRouter = express.Router();
@@ -76,7 +78,17 @@ tagRouter.post('/', tagController.create);
 tagRouter.get('/:id', tagController.show);
 tagRouter.get('/:id/edit', tagController.edit);
 tagRouter.post('/:id/edit', tagController.update);
-tagRouter.post('/:id/delete', tagController.destroy);
+tagRouter.get('/:id/delete', tagController.destroy);
+
+// Create image routes router
+const imageRouter = express.Router();
+imageRouter.get('/', imageController.index);
+imageRouter.get('/new', imageController.create);
+imageRouter.post('/', imageController.store);
+imageRouter.get('/:id', imageController.show);
+imageRouter.get('/:id/edit', imageController.edit);
+imageRouter.post('/:id/edit', imageController.update);
+imageRouter.get('/:id/delete', imageController.destroy);
 
 // Mount resource routers
 router.use('/users', userRouter);
@@ -84,7 +96,7 @@ router.use('/shelters', shelterRouter);
 router.use('/pets', petRouter);
 router.use('/tags', tagRouter);
 router.use('/adoptions', adoptionRouter);
-router.use('/images', imageRoutes);
+router.use('/images', imageRouter);
 
 // Error handling
 router.use(notFoundHandler);

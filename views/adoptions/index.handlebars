@@ -22,7 +22,7 @@
                     <th class="px-3">Pet</th>
                     <th class="px-3">Solicitante</th>
                     <th class="px-3">Status</th>
-                    <th class="px-3" style="width: 140px;">Ações</th>
+                    <th class="px-3" style="width: 200px;">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +39,8 @@
                         </td>
                         <td class="px-3 text-nowrap">
                             <a href="{{this.viewUrl}}" class="btn btn-info btn-sm me-1">Ver</a>
-                            <a href="{{this.editUrl}}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{{this.editUrl}}" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <a href="/adoptions/{{this.id}}/delete" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta solicitação de adoção?')">Excluir</a>
                         </td>
                     </tr>
                     {{/each}}

@@ -22,7 +22,7 @@
                     <th class="px-3">Nome</th>
                     <th class="px-3">Email</th>
                     <th class="px-3">Telefone</th>
-                    <th class="px-3" style="width: 140px;">Ações</th>
+                    <th class="px-3" style="width: 200px;">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,7 +35,8 @@
                         <td class="px-3">{{this.phone}}</td>
                         <td class="px-3 text-nowrap">
                             <a href="/users/{{this.id}}" class="btn btn-info btn-sm me-1">Ver</a>
-                            <a href="/users/{{this.id}}/edit" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="/users/{{this.id}}/edit" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <a href="/users/{{this.id}}/delete" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
                         </td>
                     </tr>
                     {{/each}}
