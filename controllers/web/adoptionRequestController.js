@@ -1,13 +1,19 @@
-import AdoptionRequest from '../../models/AdoptionRequest.js';
-import Pet from '../../models/Pet.js';
-import User from '../../models/User.js';
+import { AdoptionRequest, Pet, User } from '../../models/index.js';
 
 export const index = async (req, res) => {
   try {
     const adoptionRequests = await AdoptionRequest.findAll({
       include: [
-        { model: Pet, attributes: ['name', 'species', 'breed'] },
-        { model: User, attributes: ['name', 'email'] }
+        { 
+          model: Pet, 
+          as: 'pet',
+          attributes: ['name', 'species', 'breed'] 
+        },
+        { 
+          model: User, 
+          as: 'user',
+          attributes: ['name', 'email'] 
+        }
       ]
     });
     const plainRequests = adoptionRequests.map(request => ({
@@ -29,8 +35,16 @@ export const show = async (req, res) => {
   try {
     const adoptionRequest = await AdoptionRequest.findByPk(req.params.id, {
       include: [
-        { model: Pet, attributes: ['name', 'species', 'breed'] },
-        { model: User, attributes: ['name', 'email', 'phone'] }
+        { 
+          model: Pet, 
+          as: 'pet',
+          attributes: ['name', 'species', 'breed'] 
+        },
+        { 
+          model: User, 
+          as: 'user',
+          attributes: ['name', 'email', 'phone'] 
+        }
       ]
     });
     

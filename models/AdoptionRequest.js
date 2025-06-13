@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
-import User from './User.js';
 import Pet from './Pet.js';
+import User from './User.js';
 
 class AdoptionRequest extends Model {}
 
@@ -39,11 +39,5 @@ AdoptionRequest.init({
   sequelize,
   modelName: 'AdoptionRequest'
 });
-
-// Define associations
-AdoptionRequest.belongsTo(User, { foreignKey: 'userId' });
-AdoptionRequest.belongsTo(Pet, { foreignKey: 'petId' });
-User.hasMany(AdoptionRequest, { foreignKey: 'userId' });
-Pet.hasMany(AdoptionRequest, { foreignKey: 'petId' });
 
 export default AdoptionRequest;

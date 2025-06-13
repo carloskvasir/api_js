@@ -1,5 +1,4 @@
-import Image from '../../models/Image.js';
-import Pet from '../../models/Pet.js';
+import { Image, Pet } from '../../models/index.js';
 
 // Função helper para validar texto
 const validateText = (text) => {
@@ -13,7 +12,11 @@ const validateText = (text) => {
 export const index = async (req, res) => {
   try {
     const images = await Image.findAll({
-      include: [{ model: Pet, attributes: ['name'] }]
+      include: [{ 
+        model: Pet, 
+        as: 'pet',
+        attributes: ['name'] 
+      }]
     });
     const plainImages = images.map(image => {
       const plainImage = image.get({ plain: true });
@@ -39,7 +42,11 @@ export const index = async (req, res) => {
 export const show = async (req, res) => {
   try {
     const image = await Image.findByPk(req.params.id, {
-      include: [{ model: Pet, attributes: ['name', 'id'] }]
+      include: [{ 
+        model: Pet, 
+        as: 'pet',
+        attributes: ['name', 'id'] 
+      }]
     });
     
     if (!image) {
@@ -110,7 +117,11 @@ export const edit = async (req, res) => {
   try {
     const [image, pets] = await Promise.all([
       Image.findByPk(req.params.id, {
-        include: [{ model: Pet, attributes: ['name'] }]
+        include: [{ 
+          model: Pet, 
+          as: 'pet',
+          attributes: ['name'] 
+        }]
       }),
       Pet.findAll()
     ]);

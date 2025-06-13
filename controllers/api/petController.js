@@ -1,10 +1,13 @@
-import Pet from '../../models/Pet.js';
-import Shelter from '../../models/Shelter.js';
+import { Pet, Shelter } from '../../models/index.js';
 
 export const getAllPets = async (req, res) => {
   try {
     const pets = await Pet.findAll({
-      include: [{ model: Shelter, attributes: ['name', 'email'] }]
+      include: [{ 
+        model: Shelter, 
+        as: 'shelter',
+        attributes: ['name', 'email'] 
+      }]
     });
     res.json(pets);
   } catch (error) {
@@ -15,7 +18,11 @@ export const getAllPets = async (req, res) => {
 export const getPetById = async (req, res) => {
   try {
     const pet = await Pet.findByPk(req.params.id, {
-      include: [{ model: Shelter, attributes: ['name', 'email', 'phone'] }]
+      include: [{ 
+        model: Shelter, 
+        as: 'shelter',
+        attributes: ['name', 'email', 'phone'] 
+      }]
     });
     if (!pet) {
       return res.status(404).json({ error: 'Pet não encontrado' });

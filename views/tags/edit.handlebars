@@ -1,0 +1,226 @@
+{{! filepath: /home/carlos/github/api_js/views/tags/edit.handlebars }}
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                  <i class="fas fa-edit"></i> {{title}}
+                </h2>
+                <div>
+                  <a href="/tags/{{tag.id}}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-eye"></i> Ver Tag
+                  </a>
+                  <a href="/tags" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              {{#if error}}
+                <div class="alert alert-danger alert-dismissible fade show">
+                  <i class="fas fa-exclamation-triangle"></i> {{error}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {{/if}}
+
+              <form action="/tags/{{tag.id}}/edit" method="POST" id="editTagForm">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="mb-3">
+                      <label for="name" class="form-label">
+                        <i class="fas fa-tag"></i> Nome da Tag <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" class="form-control" id="name" name="name" 
+                             value="{{tag.name}}" required maxlength="50"
+                             placeholder="Ex: Vacinado, Brincalhão, Idoso...">
+                      <div class="form-text">
+                        Nome único e descritivo para identificar a tag
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label for="color" class="form-label">
+                        <i class="fas fa-palette"></i> Cor
+                      </label>
+                      <div class="input-group">
+                        <input type="color" class="form-control form-control-color" 
+                               id="color" name="color" value="{{tag.color}}" title="Escolha uma cor">
+                        <input type="text" class="form-control" id="colorText" 
+                               value="{{tag.color}}" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="category" class="form-label">
+                    <i class="fas fa-folder"></i> Categoria <span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" id="category" name="category" required>
+                    {{#each categories}}
+                      <option value="{{value}}" {{#if (eq value ../tag.category)}}selected{{/if}}>
+                        {{label}}
+                      </option>
+                    {{/each}}
+                  </select>
+                  <div class="form-text">
+                    Categorize a tag para melhor organização
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="description" class="form-label">
+                    <i class="fas fa-align-left"></i> Descrição
+                  </label>
+                  <textarea class="form-control" id="description" name="description" 
+                            rows="3" maxlength="500"
+                            placeholder="Descreva quando usar esta tag...">{{tag.description}}</textarea>
+                  <div class="form-text">
+                    Descrição opcional para esclarecer o uso da tag
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isActive" name="isActive" 
+                           {{#if tag.isActive}}checked{{/if}}>
+                    <label class="form-check-label" for="isActive">
+                      <i class="fas fa-toggle-on"></i> Tag ativa
+                    </label>
+                    <div class="form-text">
+                      Tags inativas não aparecem nas listagens e não podem ser associadas a novos pets
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Preview da tag -->
+                <div class="mb-4">
+                  <label class="form-label">
+                    <i class="fas fa-eye"></i> Pré-visualização
+                  </label>
+                  <div class="p-3 bg-light rounded">
+                    <span id="tagPreview" class="badge" style="background-color: {{tag.color}}; color: white;">
+                      {{tag.name}}
+                    </span>
+                    <small class="ms-2 text-muted">
+                      Categoria: <span id="categoryPreview">
+                        {{#each categories}}
+                          {{#if (eq value ../tag.category)}}{{label}}{{/if}}
+                        {{/each}}
+                      </span>
+                    </small>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                  </button>
+                  <a href="/tags/{{tag.id}}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                  </a>
+                  <button type="button" class="btn btn-outline-danger ms-auto" 
+                          onclick="confirmDelete()">
+                    <i class="fas fa-trash"></i> Desativar Tag
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmação de desativação -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-exclamation-triangle text-warning"></i> 
+              Confirmar Desativação
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Tem certeza que deseja desativar a tag <strong>{{tag.name}}</strong>?</p>
+            <div class="alert alert-warning">
+              <i class="fas fa-info-circle"></i>
+              <strong>Atenção:</strong> A tag será marcada como inativa e:
+              <ul class="mb-0 mt-2">
+                <li>Não aparecerá mais nas listagens</li>
+                <li>Não poderá ser associada a novos pets</li>
+                <li>Os relacionamentos existentes serão mantidos</li>
+                <li>Pode ser reativada posteriormente</li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+            <form action="/tags/{{tag.id}}/delete" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Desativar Tag
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Atualizar preview em tempo real
+      function updatePreview() {
+        const name = document.getElementById('name').value || 'Nome da Tag';
+        const color = document.getElementById('color').value;
+        const category = document.getElementById('category');
+        const categoryText = category.options[category.selectedIndex].text;
+        
+        const preview = document.getElementById('tagPreview');
+        preview.textContent = name;
+        preview.style.backgroundColor = color;
+        
+        document.getElementById('categoryPreview').textContent = categoryText;
+        document.getElementById('colorText').value = color;
+      }
+
+      // Event listeners
+      document.getElementById('name').addEventListener('input', updatePreview);
+      document.getElementById('color').addEventListener('input', updatePreview);
+      document.getElementById('category').addEventListener('change', updatePreview);
+
+      // Sincronizar color picker com input text
+      document.getElementById('color').addEventListener('input', function() {
+        document.getElementById('colorText').value = this.value;
+      });
+
+      // Validação do formulário
+      document.getElementById('editTagForm').addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        if (name.length < 2) {
+          e.preventDefault();
+          alert('O nome da tag deve ter pelo menos 2 caracteres.');
+          return false;
+        }
+        if (name.length > 50) {
+          e.preventDefault();
+          alert('O nome da tag não pode ter mais de 50 caracteres.');
+          return false;
+        }
+      });
+
+      // Função para confirmar desativação
+      function confirmDelete() {
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+      }
+
+      // Inicializar preview
+      updatePreview();
+    </script>

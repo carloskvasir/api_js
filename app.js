@@ -4,6 +4,9 @@ import { errorHandler } from './middleware/errorHandler.js';
 import apiRouter from './routes/api.js';
 import webRouter from './routes/web.js';
 
+// Importar models com associações já configuradas
+import './models/index.js';
+
 const app = express();
 
 // Configuração do Handlebars
@@ -11,6 +14,23 @@ app.engine('handlebars', engine({
   helpers: {
     eq (a, b) {
       return a === b;
+    },
+    gt (a, b) {
+      return a > b;
+    },
+    lt (a, b) {
+      return a < b;
+    },
+    'format-date'(date) {
+      if (!date) return 'Data não disponível';
+      const d = new Date(date);
+      return d.toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
   }
 }));

@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
-import Pet from './Pet.js';
 
 class Image extends Model {}
 
@@ -12,11 +11,7 @@ Image.init({
   },
   petId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Pet,
-      key: 'id'
-    }
+    allowNull: false
   },
   url: {
     type: DataTypes.STRING,
@@ -29,9 +24,5 @@ Image.init({
   timestamps: true,
   updatedAt: false  // Apenas createdAt, sem updatedAt
 });
-
-// Define associations
-Image.belongsTo(Pet, { foreignKey: 'petId' });
-Pet.hasMany(Image, { foreignKey: 'petId' });
 
 export default Image;

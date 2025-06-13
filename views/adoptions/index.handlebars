@@ -30,8 +30,8 @@
                     {{#each adoptionRequests}}
                     <tr>
                         <td class="px-3">{{this.id}}</td>
-                        <td class="px-3">{{this.Pet.name}} ({{this.Pet.species}} - {{this.Pet.breed}})</td>
-                        <td class="px-3">{{this.User.name}}</td>
+                        <td class="px-3">{{this.pet.name}} ({{this.pet.species}} - {{this.pet.breed}})</td>
+                        <td class="px-3">{{this.user.name}}</td>
                         <td class="px-3">
                             <span class="badge {{#if (eq this.status 'approved')}}bg-success{{else if (eq this.status 'rejected')}}bg-danger{{else}}bg-warning{{/if}}">
                                 {{this.status}}

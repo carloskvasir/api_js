@@ -1,10 +1,13 @@
-import Shelter from '../../models/Shelter.js';
-import User from '../../models/User.js';
+import { Shelter, User } from '../../models/index.js';
 
 export const index = async (req, res) => {
   try {
     const shelters = await Shelter.findAll({
-      include: [{ model: User, attributes: ['name', 'email'] }]
+      include: [{ 
+        model: User, 
+        as: 'user',
+        attributes: ['name', 'email'] 
+      }]
     });
     const plainShelters = shelters.map(shelter => ({
       ...shelter.get({ plain: true }),
@@ -24,7 +27,11 @@ export const index = async (req, res) => {
 export const show = async (req, res) => {
   try {
     const shelter = await Shelter.findByPk(req.params.id, {
-      include: [{ model: User, attributes: ['name', 'email'] }]
+      include: [{ 
+        model: User, 
+        as: 'user',
+        attributes: ['name', 'email'] 
+      }]
     });
     
     if (!shelter) {

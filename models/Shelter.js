@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
-import User from './User.js';
+import UserModel from './User.js';
 
 class Shelter extends Model {}
 
@@ -38,16 +38,12 @@ Shelter.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: User,
+      model: UserModel,
       key: 'id'
     }
   }
 }, {
   sequelize
 });
-
-// Definir associação com User
-Shelter.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Shelter, { foreignKey: 'userId' });
 
 export default Shelter;
