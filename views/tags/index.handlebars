@@ -1,0 +1,187 @@
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">{{title}}</h1>
+            <div>
+              <a href="/tags/stats" class="btn btn-info me-2">
+                <i class="fas fa-chart-bar"></i> Estatísticas
+              </a>
+              <a href="/tags/new" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nova Tag
+              </a>
+            </div>
+          </div>
+
+          <!-- Filtros -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                  <label for="category" class="form-label">Categoria</label>
+                  <select name="category" id="category" class="form-select">
+                    {{#each categories}}
+                      <option value="{{value}}" {{#if (eq value ../currentCategory)}}selected{{/if}}>
+                        {{label}}
+                      </option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="search" class="form-label">Buscar</label>
+                  <input type="text" name="search" id="search" class="form-control" 
+                         placeholder="Nome ou descrição da tag..." value="{{searchQuery}}">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">&nbsp;</label>
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-outline-primary">
+                      <i class="fas fa-search"></i> Filtrar
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Resultados -->
+          {{#if tags}}
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                  <i class="fas fa-tags"></i> 
+                  {{totalTags}} tag{{#if (gt totalTags 1)}}s{{/if}} encontrada{{#if (gt totalTags 1)}}s{{/if}}
+                </span>
+                <small class="text-muted">
+                  Categoria: {{#each categories}}{{#if (eq value ../currentCategory)}}{{label}}{{/if}}{{/each}}
+                </small>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Tag</th>
+                        <th>Categoria</th>
+                        <th>Descrição</th>
+                        <th class="text-center">Pets</th>
+                        <th class="text-end">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#each tags}}
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <span class="badge me-2" style="background-color: {{color}}; color: white;">
+                                {{name}}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="badge bg-light text-dark">
+                              {{#if (eq category 'health')}}
+                                <i class="fas fa-heart text-danger"></i> Saúde
+                              {{else if (eq category 'behavior')}}
+                                <i class="fas fa-smile text-warning"></i> Comportamento
+                              {{else if (eq category 'physical')}}
+                                <i class="fas fa-paw text-info"></i> Físicas
+                              {{else if (eq category 'care')}}
+                                <i class="fas fa-hand-holding-heart text-primary"></i> Cuidados
+                              {{else}}
+                                <i class="fas fa-tag text-secondary"></i> Outros
+                              {{/if}}
+                            </span>
+                          </td>
+                          <td>
+                            <small class="text-muted">{{description}}</small>
+                          </td>
+                          <td class="text-center">
+                            {{#if petCount}}
+                              <span class="badge bg-success">{{petCount}}</span>
+                            {{else}}
+                              <span class="badge bg-light text-muted">0</span>
+                            {{/if}}
+                          </td>
+                          <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                              <a href="{{viewUrl}}" class="btn btn-outline-primary" title="Ver detalhes">
+                                <i class="fas fa-eye"></i>
+                              </a>
+                              <a href="{{editUrl}}" class="btn btn-outline-warning" title="Editar">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <button type="button" class="btn btn-outline-danger" title="Excluir"
+                                      onclick="confirmDelete('{{deleteUrl}}', '{{name}}')">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          {{else}}
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Nenhuma tag encontrada</h5>
+                <p class="text-muted">
+                  {{#if searchQuery}}
+                    Nenhuma tag corresponde aos critérios de busca.
+                  {{else}}
+                    Comece criando sua primeira tag para categorizar os pets.
+                  {{/if}}
+                </p>
+                <a href="/tags/new" class="btn btn-primary">
+                  <i class="fas fa-plus"></i> Criar primeira tag
+                </a>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmar Exclusão</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Tem certeza que deseja desativar a tag <strong id="tagName"></strong>?</p>
+            <p class="text-muted small">
+              <i class="fas fa-info-circle"></i> 
+              A tag será marcada como inativa, mas não será removida permanentemente.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Desativar Tag
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function confirmDelete(deleteUrl, tagName) {
+        document.getElementById('tagName').textContent = tagName;
+        document.getElementById('deleteForm').action = deleteUrl;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+      }
+
+      // Auto-submit form when category changes
+      document.getElementById('category').addEventListener('change', function() {
+        this.form.submit();
+      });
+    </script>

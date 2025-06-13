@@ -1,0 +1,251 @@
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center">
+              <a href="/tags" class="btn btn-outline-secondary me-3">
+                <i class="fas fa-arrow-left"></i> Voltar
+              </a>
+              <div>
+                <h1 class="h2 mb-1">{{title}}</h1>
+                <span class="badge fs-6" style="background-color: {{tag.color}}; color: white;">
+                  {{tag.name}}
+                </span>
+              </div>
+            </div>
+            <div>
+              <a href="{{tag.editUrl}}" class="btn btn-warning me-2">
+                <i class="fas fa-edit"></i> Editar
+              </a>
+              <button type="button" class="btn btn-danger" 
+                      onclick="confirmDelete('{{tag.deleteUrl}}', '{{tag.name}}')">
+                <i class="fas fa-trash"></i> Desativar
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensagem de sucesso -->
+          {{#if successMessage}}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="fas fa-check-circle"></i> {{successMessage}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {{/if}}
+
+          <div class="row">
+            <!-- Informações da Tag -->
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Informações da Tag
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <dl class="row">
+                    <dt class="col-sm-4">Nome:</dt>
+                    <dd class="col-sm-8">
+                      <span class="badge" style="background-color: {{tag.color}}; color: white;">
+                        {{tag.name}}
+                      </span>
+                    </dd>
+
+                    <dt class="col-sm-4">Categoria:</dt>
+                    <dd class="col-sm-8">
+                      <span class="badge bg-light text-dark">
+                        {{#if (eq tag.category 'health')}}
+                          <i class="fas fa-heart text-danger"></i> Saúde
+                        {{else if (eq tag.category 'behavior')}}
+                          <i class="fas fa-smile text-warning"></i> Comportamento
+                        {{else if (eq tag.category 'physical')}}
+                          <i class="fas fa-paw text-info"></i> Características Físicas
+                        {{else if (eq tag.category 'care')}}
+                          <i class="fas fa-hand-holding-heart text-primary"></i> Cuidados
+                        {{else}}
+                          <i class="fas fa-tag text-secondary"></i> Outros
+                        {{/if}}
+                      </span>
+                    </dd>
+
+                    <dt class="col-sm-4">Descrição:</dt>
+                    <dd class="col-sm-8">
+                      {{#if tag.description}}
+                        {{tag.description}}
+                      {{else}}
+                        <em class="text-muted">Sem descrição</em>
+                      {{/if}}
+                    </dd>
+
+                    <dt class="col-sm-4">Cor:</dt>
+                    <dd class="col-sm-8">
+                      <span class="d-inline-flex align-items-center">
+                        <span class="color-preview me-2" 
+                              style="width: 20px; height: 20px; background-color: {{tag.color}}; border-radius: 3px; border: 1px solid #ddd;"></span>
+                        <code>{{tag.color}}</code>
+                      </span>
+                    </dd>
+
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                      {{#if tag.isActive}}
+                        <span class="badge bg-success">Ativa</span>
+                      {{else}}
+                        <span class="badge bg-secondary">Inativa</span>
+                      {{/if}}
+                    </dd>
+
+                    <dt class="col-sm-4">Criada em:</dt>
+                    <dd class="col-sm-8">
+                      <small class="text-muted">
+                        {{format-date tag.createdAt}}
+                      </small>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+
+              <!-- Estatísticas -->
+              <div class="card mt-3">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie"></i> Estatísticas
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="row text-center">
+                    <div class="col-12 mb-3">
+                      <div class="stat-item">
+                        <div class="stat-number text-primary fs-4 fw-bold">{{totalPets}}</div>
+                        <div class="stat-label text-muted">Pet{{#if (gt totalPets 1)}}s{{/if}} com esta tag</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {{#if speciesCount}}
+                    <hr>
+                    <h6 class="text-muted mb-2">Por espécie:</h6>
+                    {{#each speciesCount}}
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="small">{{@key}}</span>
+                        <span class="badge bg-light text-dark">{{this}}</span>
+                      </div>
+                    {{/each}}
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+
+            <!-- Lista de Pets -->
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-paw"></i> Pets com esta tag
+                  </h5>
+                  <span class="badge bg-primary">{{totalPets}}</span>
+                </div>
+                <div class="card-body">
+                  {{#if tag.pets}}
+                    <div class="row">
+                      {{#each tag.pets}}
+                        <div class="col-lg-6 mb-3">
+                          <div class="card border">
+                            <div class="card-body p-3">
+                              <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                  <h6 class="card-title mb-1">
+                                    <a href="{{viewUrl}}" class="text-decoration-none">{{name}}</a>
+                                  </h6>
+                                  <p class="card-text small text-muted mb-2">
+                                    {{species}} • {{breed}} • {{age}} ano{{#if (gt age 1)}}s{{/if}}
+                                  </p>
+                                </div>
+                                <span class="badge bg-{{#if (eq status 'available')}}success{{else if (eq status 'pending')}}warning{{else}}secondary{{/if}}">
+                                  {{#if (eq status 'available')}}Disponível{{else if (eq status 'pending')}}Pendente{{else}}Adotado{{/if}}
+                                </span>
+                              </div>
+
+                              <!-- Tags do pet -->
+                              {{#if tags}}
+                                <div class="mb-2">
+                                  {{#each tags}}
+                                    <span class="badge me-1 mb-1" style="background-color: {{color}}; color: white; font-size: 0.7rem;">
+                                      {{name}}
+                                    </span>
+                                  {{/each}}
+                                </div>
+                              {{/if}}
+
+                              <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                  <i class="fas fa-clock"></i> {{format-date createdAt}}
+                                </small>
+                                <div class="btn-group btn-group-sm">
+                                  <a href="{{viewUrl}}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a href="{{editUrl}}" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {{/each}}
+                    </div>
+                  {{else}}
+                    <div class="text-center py-5">
+                      <i class="fas fa-paw fa-3x text-muted mb-3"></i>
+                      <h6 class="text-muted">Nenhum pet com esta tag</h6>
+                      <p class="text-muted">
+                        Esta tag ainda não foi aplicada a nenhum pet.
+                      </p>
+                      <a href="/pets" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Gerenciar Pets
+                      </a>
+                    </div>
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmar Desativação</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Tem certeza que deseja desativar a tag <strong id="tagName"></strong>?</p>
+            <p class="text-muted small">
+              <i class="fas fa-info-circle"></i> 
+              A tag será marcada como inativa, mas permanecerá associada aos pets que já a possuem.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Desativar Tag
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function confirmDelete(deleteUrl, tagName) {
+        document.getElementById('tagName').textContent = tagName;
+        document.getElementById('deleteForm').action = deleteUrl;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+      }
+    </script>

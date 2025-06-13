@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
-import Shelter from './Shelter.js';
 
 class Pet extends Model {}
 
@@ -39,19 +38,11 @@ Pet.init({
   },
   shelterId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Shelter,
-      key: 'id'
-    }
+    allowNull: false
   }
 }, {
   sequelize,
   modelName: 'Pet'
 });
-
-// Define associations
-Pet.belongsTo(Shelter, { foreignKey: 'shelterId' });
-Shelter.hasMany(Pet, { foreignKey: 'shelterId' });
 
 export default Pet;

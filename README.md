@@ -19,6 +19,7 @@ erDiagram
     USERS ||--o{ PETS : manages
     USERS ||--o{ SHELTERS : manages
     USERS ||--o{ USER_ROLES : has
+    USERS ||--o{ PET_TAGS : adds
     ROLES ||--o{ USER_ROLES : assigned_to
     ROLES ||--o{ ROLE_PERMISSIONS : has
     PERMISSIONS ||--o{ ROLE_PERMISSIONS : assigned_to
@@ -34,6 +35,7 @@ erDiagram
     
     PETS ||--o{ IMAGES : has
     PETS ||--o{ ADOPTION_REQUESTS : receives
+    PETS ||--o{ PET_TAGS : has
     PETS {
         int id PK
         string name
@@ -43,6 +45,27 @@ erDiagram
         text description
         enum status
         int shelter_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    
+    TAGS ||--o{ PET_TAGS : used_in
+    TAGS {
+        int id PK
+        string name
+        text description
+        string color
+        enum category
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+    
+    PET_TAGS {
+        int id PK
+        int pet_id FK
+        int tag_id FK
+        int added_by FK
         datetime created_at
         datetime updated_at
     }
@@ -197,6 +220,18 @@ erDiagram
 - `POST /pets` - Register a new pet for adoption
 - `PUT /pets/:id` - Update pet information
 - `DELETE /pets/:id` - Remove a pet listing
+
+### Tags
+- `GET /tags` - List all active tags
+- `GET /tags/:id` - Get details of a specific tag
+- `POST /tags` - Create new tag
+- `PUT /tags/:id` - Update tag information
+- `DELETE /tags/:id` - Deactivate tag
+- `GET /tags/category/:category` - Get tags by category
+- `GET /tags/stats/usage` - Get tag usage statistics
+- `POST /pets/:petId/tags` - Add tags to a pet
+- `DELETE /pets/:petId/tags/:tagId` - Remove tag from pet
+- `GET /pets/search-by-tags` - Search pets by tags
 
 ### Shelters/Protectors
 - `GET /shelters` - List all registered shelters/protectors

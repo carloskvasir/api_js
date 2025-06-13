@@ -1,5 +1,4 @@
-import Image from '../../models/Image.js';
-import Pet from '../../models/Pet.js';
+import { Image, Pet } from '../../models/index.js';
 
 // Função helper para validar texto
 const validateText = (text) => {

@@ -47,6 +47,46 @@
                     <small class="text-muted">Telefone: {{pet.Shelter.phone}}</small>
                 </div>
             </div>
+            {{#if pet.tags}}
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Tags:</strong></div>
+                <div class="col-md-9">
+                    {{#each pet.tags}}
+                        <span class="badge me-2 mb-1" style="background-color: {{this.color}}; color: white;">
+                            {{#if (eq this.category 'health')}}
+                                <i class="fas fa-heart"></i>
+                            {{else if (eq this.category 'behavior')}}
+                                <i class="fas fa-smile"></i>
+                            {{else if (eq this.category 'physical')}}
+                                <i class="fas fa-paw"></i>
+                            {{else if (eq this.category 'care')}}
+                                <i class="fas fa-hand-holding-heart"></i>
+                            {{else}}
+                                <i class="fas fa-tag"></i>
+                            {{/if}}
+                            {{this.name}}
+                        </span>
+                    {{/each}}
+                    <div class="mt-2">
+                        <a href="/tags" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-tags"></i> Gerenciar Tags
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="row mb-3">
+                <div class="col-md-3"><strong>Tags:</strong></div>
+                <div class="col-md-9">
+                    <span class="text-muted">Nenhuma tag associada</span>
+                    <div class="mt-2">
+                        <a href="/pets/{{pet.id}}/edit" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-plus"></i> Adicionar Tags
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
         </div>
         <div class="card-footer">
             <div class="d-flex gap-2">
