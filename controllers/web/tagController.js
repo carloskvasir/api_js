@@ -291,29 +291,71 @@ export const destroy = async (req, res) => {
   }
 };
 
-// Página de estatísticas das tags
+// Página de estatísticas das tags (versão simplificada)
 export const stats = async (req, res) => {
   try {
-    // Teste simples primeiro
-    const totalTags = await Tag.count({ where: { isActive: true } });
-    const totalRelationships = await PetTag.count();
+    // Labels para categorias
+    const categoryLabels = {
+      health: 'Saúde',
+      behavior: 'Comportamento', 
+      physical: 'Características Físicas',
+      care: 'Cuidados',
+      other: 'Outros'
+    };
 
-    // Dados de teste simples
-    const mostUsedTags = [];
-    const categoryStats = [
-      { category: 'health', count: 5, label: 'Saúde' },
-      { category: 'behavior', count: 3, label: 'Comportamento' },
-      { category: 'physical', count: 4, label: 'Características Físicas' },
-      { category: 'care', count: 2, label: 'Cuidados' },
-      { category: 'other', count: 1, label: 'Outros' }
-    ];
+    // Buscar todas as tags ativas com seus pets (método simples)
+    const allTags = await Tag.findAll({
+      where: { isActive: true },
+      include: [{
+        model: Pet,
+        as: 'pets',
+        through: { attributes: [] },
+        where: { status: 'available' },
+        required: false
+      }],
+      order: [['name', 'ASC']]
+    });
+
+    // Processar dados de forma simples
+    const tagStats = allTags
+      .map(tag => ({
+        id: tag.id,
+        name: tag.name,
+        description: tag.description,
+        color: tag.color,
+        category: tag.category,
+        usageCount: tag.pets?.length || 0,
+        viewUrl: `/tags/${tag.id}`
+      }))
+      .sort((a, b) => b.usageCount - a.usageCount); // Ordenar por uso
+
+    // Top 10 mais usadas
+    const mostUsedTags = tagStats.slice(0, 10);
+
+    // Estatísticas por categoria (usando reduce - mais elegante)
+    const categoryStats = Object.entries(
+      allTags.reduce((acc, tag) => {
+        acc[tag.category] = (acc[tag.category] || 0) + 1;
+        return acc;
+      }, {})
+    ).map(([category, count]) => ({
+      category,
+      count,
+      label: categoryLabels[category] || category
+    }));
+
+    // Métricas simples
+    const totalTags = allTags.length;
+    const totalRelationships = await PetTag.count();
+    const maxUsage = tagStats[0]?.usageCount || 0;
 
     res.render('tags/stats', {
       title: 'Estatísticas das Tags',
       mostUsedTags,
       categoryStats,
       totalTags,
-      totalRelationships
+      totalRelationships,
+      maxUsage
     });
   } catch (error) {
     console.error('Erro nas estatísticas:', error);
