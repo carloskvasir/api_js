@@ -1,6 +1,73 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Tag:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID da tag.
+ *           example: 1
+ *         name:
+ *           type: string
+ *           description: Nome da tag.
+ *           example: "Amigável"
+ *         description:
+ *           type: string
+ *           description: Descrição da tag.
+ *           example: "O animal é sociável com humanos."
+ *         color:
+ *           type: string
+ *           description: Cor da tag em formato hexadecimal.
+ *           example: "#007bff"
+ *         category:
+ *           type: string
+ *           enum: [health, behavior, physical, care, other]
+ *           description: Categoria da tag.
+ *           example: "behavior"
+ *         isActive:
+ *           type: boolean
+ *           description: Indica se a tag está ativa.
+ *           example: true
+ *         createdAt:
+ *           type: string
+ *           description: Data de criação do registro.
+ *         updatedAt:
+ *           type: string
+ *           description: Data da última atualização do registro.
+ *     TagInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - category
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Nome da tag.
+ *           example: "Brincalhão"
+ *         description:
+ *           type: string
+ *           description: Descrição da tag.
+ *           example: "Gosta de brincar com bolinhas."
+ *         color:
+ *           type: string
+ *           description: Cor da tag em formato hexadecimal.
+ *           example: "#28a745"
+ *         category:
+ *           type: string
+ *           enum: [health, behavior, physical, care, other]
+ *           description: Categoria da tag.
+ *           example: "behavior"
+ *         isActive:
+ *           type: boolean
+ *           description: Indica se a tag está ativa.
+ *           example: true
+ */
+
 class Tag extends Model {
   // Método para obter tags por categoria
   static async getByCategory(category) {

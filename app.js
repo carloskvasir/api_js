@@ -1,5 +1,7 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger.js'; // Import swaggerSpec
 import { errorHandler } from './middleware/errorHandler.js';
 import apiRouter from './routes/api.js';
 import webRouter from './routes/web.js';
@@ -58,6 +60,9 @@ app.set('views', './views');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rotas
 app.use('/api', apiRouter);
