@@ -1,0 +1,141 @@
+{{! Edit Role }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Editar Role</h4>
+                    <a href="/roles" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> {{error}}
+                    </div>
+                    {{/if}}
+
+                    <form action="/roles/{{role.id}}/update" method="POST" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Nome do Role *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{role.name}}" required maxlength="50">
+                                <div class="invalid-feedback">
+                                    Por favor, forneça um nome válido para o role.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" maxlength="500">{{role.description}}</textarea>
+                            <div class="form-text">Descrição opcional do role (máximo 500 caracteres)</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="text-muted mb-3">Permissões</h5>
+                            <div class="form-text mb-3">Selecione as permissões que este role deve ter:</div>
+                            
+                            {{#if permissions}}
+                            <div class="row">
+                                {{#each permissions}}
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card border">
+                                        <div class="card-body p-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       name="permissions[]" value="{{this.id}}" 
+                                                       id="permission{{this.id}}"
+                                                       {{#if this.checked}}checked{{/if}}>
+                                                <label class="form-check-label" for="permission{{this.id}}">
+                                                    <strong>{{this.name}}</strong>
+                                                </label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <span class="badge bg-info me-1">{{this.resource}}</span>
+                                                <span class="badge bg-secondary">{{this.action}}</span>
+                                            </div>
+                                            {{#if this.description}}
+                                            <div class="text-muted small mt-2">{{this.description}}</div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                            {{else}}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> 
+                                Nenhuma permissão disponível. Crie permissões primeiro antes de atribuí-las a roles.
+                            </div>
+                            {{/if}}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/roles" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação do formulário
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Adicionar funcionalidade para selecionar/deselecionar todas as permissões
+document.addEventListener('DOMContentLoaded', function() {
+    // Adicionar botão para selecionar/deselecionar todas
+    const permissionsContainer = document.querySelector('.row');
+    if (permissionsContainer && permissionsContainer.querySelector('.form-check-input')) {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'mb-3 text-end';
+        buttonContainer.innerHTML = `
+            <button type="button" class="btn btn-sm btn-outline-primary me-2" id="selectAll">
+                <i class="fas fa-check-double"></i> Selecionar Todas
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="deselectAll">
+                <i class="fas fa-times"></i> Deselecionar Todas
+            </button>
+        `;
+        
+        permissionsContainer.parentNode.insertBefore(buttonContainer, permissionsContainer);
+
+        // Funcionalidade dos botões
+        document.getElementById('selectAll').addEventListener('click', function() {
+            document.querySelectorAll('input[name="permissions[]"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        });
+
+        document.getElementById('deselectAll').addEventListener('click', function() {
+            document.querySelectorAll('input[name="permissions[]"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        });
+    }
+});
+</script>

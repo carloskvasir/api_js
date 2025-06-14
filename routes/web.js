@@ -1,11 +1,14 @@
 import express from 'express';
 import {
-  adoptionRequestController,
-  imageController,
-  petController,
-  shelterController,
-  tagController,
-  userController
+    adoptionRequestController,
+    imageController,
+    logController,
+    permissionController,
+    petController,
+    roleController,
+    shelterController,
+    tagController,
+    userController
 } from '../controllers/web/index.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
 
@@ -22,6 +25,9 @@ router.get('/', (req, res) => {
       { name: 'Tags', path: '/tags', description: 'Gerencie tags para categorizar pets (saúde, comportamento, características físicas, etc.)' },
       { name: 'Adoções', path: '/adoptions', description: 'Gerencie solicitações de adoção, incluindo aprovação, rejeição e acompanhamento' },
       { name: 'Imagens', path: '/images', description: 'Gerencie as imagens dos pets, incluindo upload, visualização e organização das fotos' },
+      { name: 'Roles', path: '/roles', description: 'Gerencie roles de usuários e suas permissões no sistema' },
+      { name: 'Permissões', path: '/permissions', description: 'Gerencie permissões individuais que podem ser atribuídas a roles' },
+      { name: 'Logs', path: '/logs', description: 'Visualize logs de auditoria e atividades do sistema (MongoDB)' },
     ]
   });
 });
@@ -90,6 +96,31 @@ imageRouter.get('/:id/edit', imageController.edit);
 imageRouter.post('/:id/edit', imageController.update);
 imageRouter.get('/:id/delete', imageController.destroy);
 
+// Create role routes router
+const roleRouter = express.Router();
+roleRouter.get('/', roleController.index);
+roleRouter.get('/new', roleController.create);
+roleRouter.post('/', roleController.store);
+roleRouter.get('/:id', roleController.show);
+roleRouter.get('/:id/edit', roleController.edit);
+roleRouter.post('/:id/update', roleController.update);
+roleRouter.post('/:id/delete', roleController.destroy);
+
+// Create permission routes router
+const permissionRouter = express.Router();
+permissionRouter.get('/', permissionController.index);
+permissionRouter.get('/new', permissionController.create);
+permissionRouter.post('/', permissionController.store);
+permissionRouter.get('/:id', permissionController.show);
+permissionRouter.get('/:id/edit', permissionController.edit);
+permissionRouter.post('/:id/update', permissionController.update);
+permissionRouter.post('/:id/delete', permissionController.destroy);
+
+// Create log routes router (MongoDB)
+const logRouter = express.Router();
+logRouter.get('/', logController.index);
+logRouter.get('/:id', logController.show);
+
 // Mount resource routers
 router.use('/users', userRouter);
 router.use('/shelters', shelterRouter);
@@ -97,6 +128,9 @@ router.use('/pets', petRouter);
 router.use('/tags', tagRouter);
 router.use('/adoptions', adoptionRouter);
 router.use('/images', imageRouter);
+router.use('/roles', roleRouter);
+router.use('/permissions', permissionRouter);
+router.use('/logs', logRouter);
 
 // Error handling
 router.use(notFoundHandler);

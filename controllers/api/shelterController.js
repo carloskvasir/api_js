@@ -1,4 +1,5 @@
 import { Shelter } from '../../models/index.js';
+import { pickFields, SHELTER_FIELDS } from '../../utils/sanitizer.js';
 
 export const getAllShelters = async (req, res) => {
   try {
@@ -26,8 +27,8 @@ export const getShelterById = async (req, res) => {
 
 export const createShelter = async (req, res) => {
   try {
-    const shelterData = req.body;
-    const shelter = await Shelter.create(shelterData);
+    const sanitizedData = pickFields(req.body, SHELTER_FIELDS);
+    const shelter = await Shelter.create(sanitizedData);
     res.status(201).json({ message: 'Abrigo criado com sucesso', shelter });
   } catch (error) {
     if (error.name === 'SequelizeValidationError') {
@@ -40,14 +41,14 @@ export const createShelter = async (req, res) => {
 export const updateShelter = async (req, res) => {
   try {
     const { id } = req.params;
-    const shelterData = req.body;
+    const sanitizedData = pickFields(req.body, SHELTER_FIELDS);
     
     const shelter = await Shelter.findByPk(id);
     if (!shelter) {
       return res.status(404).json({ error: 'Abrigo não encontrado' });
     }
 
-    await shelter.update(shelterData);
+    await shelter.update(sanitizedData);
     res.json({ message: 'Abrigo atualizado com sucesso', shelter });
   } catch (error) {
     if (error.name === 'SequelizeValidationError') {

@@ -1,4 +1,5 @@
 import { Pet, Shelter } from '../../models/index.js';
+import { pickFields, PET_FIELDS } from '../../utils/sanitizer.js';
 
 export const getAllPets = async (req, res) => {
   try {
@@ -35,7 +36,8 @@ export const getPetById = async (req, res) => {
 
 export const createPet = async (req, res) => {
   try {
-    const pet = await Pet.create(req.body);
+    const sanitizedData = pickFields(req.body, PET_FIELDS);
+    const pet = await Pet.create(sanitizedData);
     res.status(201).json(pet);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -48,7 +50,8 @@ export const updatePet = async (req, res) => {
     if (!pet) {
       return res.status(404).json({ error: 'Pet não encontrado' });
     }
-    await pet.update(req.body);
+    const sanitizedData = pickFields(req.body, PET_FIELDS);
+    await pet.update(sanitizedData);
     res.json(pet);
   } catch (error) {
     res.status(400).json({ error: error.message });

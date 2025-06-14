@@ -6,11 +6,16 @@ import webRouter from './routes/web.js';
 
 // Importar models com associações já configuradas
 import './models/index.js';
+import './config/mongodb.js';
 
 const app = express();
 
 // Configuração do Handlebars
 app.engine('handlebars', engine({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
+  },
   helpers: {
     eq (a, b) {
       return a === b;
@@ -20,6 +25,18 @@ app.engine('handlebars', engine({
     },
     lt (a, b) {
       return a < b;
+    },
+    or (a, b) {
+      return a || b;
+    },
+    and (a, b) {
+      return a && b;
+    },
+    subtract (a, b) {
+      return a - b;
+    },
+    json (obj) {
+      return JSON.stringify(obj, null, 2);
     },
     'format-date'(date) {
       if (!date) return 'Data não disponível';

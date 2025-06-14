@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import { Pet, PetTag, Tag } from '../../models/index.js';
+import { pickFields, TAG_FIELDS } from '../../utils/sanitizer.js';
 
 // Listar todas as tags
 export const index = async (req, res) => {
@@ -95,15 +96,13 @@ export const new_ = async (req, res) => {
 // Criar nova tag
 export const create = async (req, res) => {
   try {
-    const { name, description, color, category } = req.body;
+    const sanitizedData = pickFields(req.body, TAG_FIELDS);
+    // Adicionar campos padrão que não vêm do usuário
+    sanitizedData.isActive = true;
+    sanitizedData.color = sanitizedData.color || '#007bff';
+    sanitizedData.category = sanitizedData.category || 'other';
 
-    const tag = await Tag.create({
-      name: name.trim(),
-      description: description?.trim(),
-      color: color || '#007bff',
-      category: category || 'other',
-      isActive: true
-    });
+    const tag = await Tag.create(sanitizedData);
 
     res.redirect(`/tags/${tag.id}?success=Tag criada com sucesso`);
   } catch (error) {
@@ -228,8 +227,7 @@ export const edit = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, color, category, isActive } = req.body;
-
+    
     const tag = await Tag.findByPk(id);
     if (!tag) {
       return res.status(404).render('shared/error', {
@@ -238,13 +236,13 @@ export const update = async (req, res) => {
       });
     }
 
-    await tag.update({
-      name: name.trim(),
-      description: description?.trim(),
-      color: color || '#007bff',
-      category: category || 'other',
-      isActive: isActive === 'on' || isActive === 'true'
-    });
+    const sanitizedData = pickFields(req.body, [...TAG_FIELDS, 'isActive']);
+    // Processar campos especiais
+    sanitizedData.color = sanitizedData.color || '#007bff';
+    sanitizedData.category = sanitizedData.category || 'other';
+    sanitizedData.isActive = sanitizedData.isActive === 'on' || sanitizedData.isActive === 'true';
+
+    await tag.update(sanitizedData);
 
     res.redirect(`/tags/${tag.id}?success=Tag atualizada com sucesso`);
   } catch (error) {

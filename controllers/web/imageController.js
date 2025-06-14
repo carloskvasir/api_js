@@ -1,4 +1,5 @@
 import { Image, Pet } from '../../models/index.js';
+import { pickFields, IMAGE_FIELDS } from '../../utils/sanitizer.js';
 
 // Função helper para validar texto
 const validateText = (text) => {
@@ -85,19 +86,20 @@ export const store = async (req, res) => {
     console.log('Store - Starting request processing');
     console.log('Store - Request body:', req.body);
 
-    const { petId, url } = req.body;
-    
+    // Validate petId before picking fields
+    const { petId } = req.body;
     if (!petId) {
       throw new Error('Por favor, selecione um pet');
     }
 
-    // Validar texto usando função helper
-    const cleanUrl = validateText(url);
+    const sanitizedData = pickFields(req.body, IMAGE_FIELDS);
 
-    const image = await Image.create({
-      petId,
-      url: cleanUrl
-    });
+    // Ensure url is validated if it's part of IMAGE_FIELDS and present
+    if (sanitizedData.url) {
+      sanitizedData.url = validateText(sanitizedData.url);
+    }
+
+    const image = await Image.create(sanitizedData);
     console.log('Store - Image with URL created successfully:', image.id);
     res.redirect(`/pets/${petId}`);
   } catch (error) {
@@ -142,32 +144,23 @@ export const edit = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
+    console.log('Update - Starting request processing');
+    console.log('Update - Request body:', req.body);
+
     const image = await Image.findByPk(req.params.id);
     if (!image) {
       return res.status(404).render('shared/error', { error: 'Imagem não encontrada' });
     }
-    
-    // Validar dados de entrada
-    const { petId, url } = req.body;
-    const updateData = {};
-    
-    if (petId) {
-      updateData.petId = petId;
+
+    const sanitizedData = pickFields(req.body, IMAGE_FIELDS);
+
+    // Ensure url is validated if it's part of IMAGE_FIELDS and present
+    if (sanitizedData.url) {
+      sanitizedData.url = validateText(sanitizedData.url);
     }
-    
-    // Validação da URL usando função helper
-    if (url !== undefined) {
-      // Se texto foi fornecido mas está vazio ou só espaços
-      if (!url || !url.trim()) {
-        throw new Error('Texto não pode estar vazio. Por favor, forneça um texto válido');
-      }
-      
-      // Validar texto usando função helper
-      const cleanUrl = validateText(url);
-      updateData.url = cleanUrl;
-    }
-    
-    await image.update(updateData);
+
+    await image.update(sanitizedData);
+    console.log('Update - Image with URL updated successfully:', image.id);
     res.redirect(`/images/${image.id}`);
   } catch (error) {
     const pets = await Pet.findAll();

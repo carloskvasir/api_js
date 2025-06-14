@@ -1,7 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
-import Pet from './Pet.js';
-import User from './User.js';
 
 class AdoptionRequest extends Model {}
 
@@ -15,7 +13,7 @@ AdoptionRequest.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Pet,
+      model: 'Pets',
       key: 'id'
     }
   },
@@ -23,7 +21,7 @@ AdoptionRequest.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: User,
+      model: 'Users',
       key: 'id'
     }
   },

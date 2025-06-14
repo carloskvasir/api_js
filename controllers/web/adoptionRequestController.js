@@ -1,4 +1,5 @@
 import { AdoptionRequest, Pet, User } from '../../models/index.js';
+import { pickFields, ADOPTION_REQUEST_FIELDS } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {
@@ -81,7 +82,8 @@ export const create = async (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    const adoptionRequest = await AdoptionRequest.create(req.body);
+    const sanitizedData = pickFields(req.body, ADOPTION_REQUEST_FIELDS);
+    const adoptionRequest = await AdoptionRequest.create(sanitizedData);
     res.redirect(`/adoptions/${adoptionRequest.id}`);
   } catch (error) {
     const [pets, users] = await Promise.all([
@@ -131,7 +133,8 @@ export const update = async (req, res) => {
         error: 'Solicitação de adoção não encontrada'
       });
     }
-    await adoptionRequest.update(req.body);
+    const sanitizedData = pickFields(req.body, ADOPTION_REQUEST_FIELDS);
+    await adoptionRequest.update(sanitizedData);
     res.redirect(`/adoptions/${adoptionRequest.id}`);
   } catch (error) {
     res.status(400).render('adoptions/edit', {

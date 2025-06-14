@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Roles do Sistema</h1>
+    <a href="/roles/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Role
+    </a>
+</div>
+
+{{#if error}}
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> {{error}}
+    </div>
+{{/if}}
+
+{{#if roles}}
+    <div class="row">
+        {{#each roles}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-shield-alt"></i> {{this.name}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted">{{this.description}}</p>
+                    
+                    {{#if this.permissions}}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-key"></i> 
+                                {{this.permissions.length}} permissão(ões)
+                            </small>
+                        </div>
+                        
+                        <div class="permissions-preview">
+                            {{#each this.permissions}}
+                                {{#if @first}}
+                                    <span class="badge bg-secondary me-1">{{this.name}}</span>
+                                {{/if}}
+                                {{#if (and @index (lt @index 3))}}
+                                    <span class="badge bg-secondary me-1">{{this.name}}</span>
+                                {{/if}}
+                            {{/each}}
+                            {{#if (gt this.permissions.length 3)}}
+                                <span class="badge bg-light text-dark">+{{subtract this.permissions.length 3}} mais</span>
+                            {{/if}}
+                        </div>
+                    {{else}}
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-exclamation-triangle"></i> Sem permissões
+                        </span>
+                    {{/if}}
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group w-100" role="group">
+                        <a href="/roles/{{this.id}}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <a href="/roles/{{this.id}}/edit" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{this.id}}, '{{this.name}}')">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+{{else}}
+    <div class="text-center py-5">
+        <i class="fas fa-user-shield fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">Nenhum role encontrado</h3>
+        <p class="text-muted">Comece criando o primeiro role do sistema.</p>
+        <a href="/roles/new" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Criar Primeiro Role
+        </a>
+    </div>
+{{/if}}
+
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o role <strong id="roleName"></strong>?</p>
+                <p class="text-muted small">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(roleId, roleName) {
+    document.getElementById('roleName').textContent = roleName;
+    document.getElementById('deleteForm').action = `/roles/${roleId}`;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>

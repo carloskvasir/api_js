@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { User } from '../../models/index.js';
+import { pickFields, USER_FIELDS } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {
@@ -37,7 +38,8 @@ export const create = (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    await User.create(req.body);
+    const sanitizedData = pickFields(req.body, USER_FIELDS);
+    await User.create(sanitizedData);
     res.redirect('/users');
   } catch (error) {
     res.status(400).render('users/new', {
@@ -68,7 +70,10 @@ export const update = async (req, res) => {
       return res.status(404).render('shared/error', { error: 'Usuário não encontrado' });
     }
 
-    const { currentPassword, newPassword, confirmPassword, ...updateData } = req.body;
+    const { currentPassword, newPassword, confirmPassword, ...otherFields } = req.body;
+    
+    // Sanitize the other fields using only allowed fields
+    const updateData = pickFields(otherFields, USER_FIELDS.filter(field => field !== 'password'));
 
     if (newPassword || confirmPassword || currentPassword) {
       if (!currentPassword) {

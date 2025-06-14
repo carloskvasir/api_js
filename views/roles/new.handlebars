@@ -1,0 +1,124 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-plus"></i> Novo Role</h1>
+    <a href="/roles" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+{{#if error}}
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> {{error}}
+    </div>
+{{/if}}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-user-shield"></i> Informações do Role
+                </h5>
+            </div>
+            <div class="card-body">
+                <form action="/roles" method="POST" id="roleForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome do Role *</label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               value="{{formData.name}}" placeholder="Ex: Moderador">
+                        <div class="form-text">Nome identificador do role (deve ser único)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" 
+                                  placeholder="Descreva as responsabilidades e propósito deste role">{{formData.description}}</textarea>
+                        <div class="form-text">Descrição opcional do que este role representa</div>
+                    </div>
+                    
+                    {{#if permissions}}
+                    <div class="mb-3">
+                        <label class="form-label">Permissões</label>
+                        <div class="form-text mb-2">Selecione as permissões que este role deve ter:</div>
+                        
+                        <div class="accordion" id="permissionsAccordion">
+                            {{#each permissionsByResource}}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{@key}}">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse{{@key}}" 
+                                            aria-expanded="false" aria-controls="collapse{{@key}}">
+                                        <i class="fas fa-folder me-2"></i>
+                                        {{@key}} ({{this.length}} permissões)
+                                    </button>
+                                </h2>
+                                <div id="collapse{{@key}}" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading{{@key}}" data-bs-parent="#permissionsAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            {{#each this}}
+                                            <div class="col-md-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" 
+                                                           name="permissions" value="{{this.id}}" 
+                                                           id="permission{{this.id}}">
+                                                    <label class="form-check-label" for="permission{{this.id}}">
+                                                        <strong>{{this.name}}</strong>
+                                                        <span class="badge bg-info ms-1">{{this.action}}</span>
+                                                        <br>
+                                                        <small class="text-muted">{{this.description}}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    {{/if}}
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Criar Role
+                        </button>
+                        <a href="/roles" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Dicas
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning me-1"></i>
+                        <small>Escolha um nome descritivo e único para o role</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-shield-alt text-primary me-1"></i>
+                        <small>Selecione apenas as permissões necessárias</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-users text-success me-1"></i>
+                        <small>Você pode atribuir este role aos usuários depois</small>
+                    </li>
+                    <li>
+                        <i class="fas fa-edit text-info me-1"></i>
+                        <small>As permissões podem ser editadas posteriormente</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

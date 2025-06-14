@@ -1,4 +1,5 @@
 import { Shelter, User } from '../../models/index.js';
+import { pickFields, SHELTER_FIELDS } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {
@@ -82,19 +83,13 @@ export const create = async (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    const { name, address, phone, email, userId } = req.body;
-    if (!name || !address || !phone || !email || !userId) {
+    const sanitizedData = pickFields(req.body, SHELTER_FIELDS);
+    
+    if (!sanitizedData.name || !sanitizedData.address || !sanitizedData.phone || !sanitizedData.email || !sanitizedData.userId) {
       throw new Error('Campos obrigatórios: nome, endereço, telefone, email e responsável');
     }
 
-    await Shelter.create({
-      name,
-      address, 
-      phone,
-      email,
-      userId,
-      description: req.body.description
-    });
+    await Shelter.create(sanitizedData);
     res.redirect('/shelters');
   } catch (error) {
     const users = await User.findAll();
@@ -146,7 +141,8 @@ export const update = async (req, res) => {
     if (!shelter) {
       return res.status(404).render('shared/error', { error: 'Abrigo não encontrado' });
     }
-    await shelter.update(req.body);
+    const sanitizedData = pickFields(req.body, SHELTER_FIELDS);
+    await shelter.update(sanitizedData);
     res.redirect('/shelters/' + req.params.id);
   } catch (error) {
     res.status(400).render('shelters/edit', {

@@ -1,4 +1,5 @@
 import { Pet, Shelter, Tag } from '../../models/index.js';
+import { pickFields, PET_FIELDS } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {
@@ -85,7 +86,8 @@ export const create = async (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    const { tags, ...petData } = req.body;
+    const { tags, ...otherFields } = req.body;
+    const petData = pickFields(otherFields, PET_FIELDS);
     const pet = await Pet.create(petData);
     
     // Associar tags se fornecidas
@@ -156,7 +158,8 @@ export const update = async (req, res) => {
       return res.status(404).render('shared/error', { error: 'Pet não encontrado' });
     }
     
-    const { tags, ...petData } = req.body;
+    const { tags, ...otherFields } = req.body;
+    const petData = pickFields(otherFields, PET_FIELDS);
     await pet.update(petData);
     
     // Atualizar tags se fornecidas

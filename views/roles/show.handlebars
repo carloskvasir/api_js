@@ -1,0 +1,130 @@
+{{#if error}}
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> {{error}}
+    </div>
+{{else}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-user-shield"></i> {{role.name}}
+        </h1>
+        <div class="btn-group">
+            <a href="/roles" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <a href="/roles/{{role.id}}/edit" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{role.id}}, '{{role.name}}')">
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> Informações do Role
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID:</dt>
+                        <dd class="col-sm-9">{{role.id}}</dd>
+                        
+                        <dt class="col-sm-3">Nome:</dt>
+                        <dd class="col-sm-9">{{role.name}}</dd>
+                        
+                        <dt class="col-sm-3">Descrição:</dt>
+                        <dd class="col-sm-9">{{role.description}}</dd>
+                        
+                        <dt class="col-sm-3">Criado em:</dt>
+                        <dd class="col-sm-9">{{format-date role.created_at}}</dd>
+                        
+                        <dt class="col-sm-3">Atualizado em:</dt>
+                        <dd class="col-sm-9">{{format-date role.updated_at}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-key"></i> Permissões 
+                        {{#if role.permissions}}
+                            <span class="badge bg-primary">{{role.permissions.length}}</span>
+                        {{else}}
+                            <span class="badge bg-warning text-dark">0</span>
+                        {{/if}}
+                    </h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    {{#if role.permissions}}
+                        <div class="row">
+                            {{#each role.permissions}}
+                            <div class="col-12 mb-2">
+                                <div class="d-flex align-items-center p-2 border rounded">
+                                    <div class="flex-grow-1">
+                                        <strong>{{this.name}}</strong>
+                                        <br>
+                                        <small class="text-muted">{{this.description}}</small>
+                                        <br>
+                                        <span class="badge bg-secondary">{{this.resource}}</span>
+                                        <span class="badge bg-info">{{this.action}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="text-center py-4">
+                            <i class="fas fa-key fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">Nenhuma permissão atribuída a este role.</p>
+                            <a href="/roles/{{role.id}}/edit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Adicionar Permissões
+                            </a>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o role <strong id="roleName"></strong>?</p>
+                <p class="text-muted small">Esta ação não pode ser desfeita e removerá todas as atribuições deste role.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(roleId, roleName) {
+    document.getElementById('roleName').textContent = roleName;
+    document.getElementById('deleteForm').action = `/roles/${roleId}`;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>

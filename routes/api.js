@@ -1,9 +1,12 @@
 import express from 'express';
 import {
-  petController,
-  shelterController,
-  tagController,
-  userController
+    logController,
+    permissionController,
+    petController,
+    roleController,
+    shelterController,
+    tagController,
+    userController
 } from '../controllers/api/index.js';
 import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
 
@@ -47,6 +50,33 @@ v1Router.post('/tags', tagController.createTag);
 v1Router.put('/tags/:id', tagController.updateTag);
 v1Router.delete('/tags/:id', tagController.deleteTag);
 v1Router.get('/tags/category/:category', tagController.getTagsByCategory);
+
+// Log routes
+v1Router.get('/logs', logController.getAllLogs);
+v1Router.get('/logs/:id', logController.getLogById);
+v1Router.post('/logs', logController.createLog);
+v1Router.put('/logs/:id', logController.updateLog);
+v1Router.delete('/logs/:id', logController.deleteLog);
+v1Router.get('/logs/action/:action', logController.getLogsByAction);
+v1Router.get('/logs/user/:userId', logController.getLogsByUser);
+
+// Role routes
+v1Router.get('/roles', roleController.getAllRoles);
+v1Router.get('/roles/:id', roleController.getRoleById);
+v1Router.post('/roles', roleController.createRole);
+v1Router.put('/roles/:id', roleController.updateRole);
+v1Router.delete('/roles/:id', roleController.deleteRole);
+v1Router.post('/roles/:id/permissions/:permissionId', roleController.addPermissionToRole);
+v1Router.delete('/roles/:id/permissions/:permissionId', roleController.removePermissionFromRole);
+
+// Permission routes
+v1Router.get('/permissions', permissionController.getAllPermissions);
+v1Router.get('/permissions/:id', permissionController.getPermissionById);
+v1Router.post('/permissions', permissionController.createPermission);
+v1Router.put('/permissions/:id', permissionController.updatePermission);
+v1Router.delete('/permissions/:id', permissionController.deletePermission);
+v1Router.get('/permissions/resource/:resource', permissionController.getPermissionsByResource);
+v1Router.get('/permissions/action/:action', permissionController.getPermissionsByAction);
 v1Router.get('/tags/stats/usage', tagController.getTagUsageStats);
 
 // Mount v1 routes

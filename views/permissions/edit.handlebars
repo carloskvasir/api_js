@@ -1,0 +1,104 @@
+{{! Edit Permission }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Editar Permissão</h4>
+                    <a href="/permissions" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> {{error}}
+                    </div>
+                    {{/if}}
+
+                    <form action="/permissions/{{permission.id}}/update" method="POST" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Nome da Permissão *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{permission.name}}" required maxlength="100">
+                                <div class="invalid-feedback">
+                                    Por favor, forneça um nome válido para a permissão.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="resource" class="form-label">Recurso *</label>
+                                <select class="form-select" id="resource" name="resource" required>
+                                    <option value="">Selecione um recurso</option>
+                                    <option value="users" {{#if (eq permission.resource 'users')}}selected{{/if}}>Usuários</option>
+                                    <option value="pets" {{#if (eq permission.resource 'pets')}}selected{{/if}}>Pets</option>
+                                    <option value="shelters" {{#if (eq permission.resource 'shelters')}}selected{{/if}}>Abrigos</option>
+                                    <option value="adoptions" {{#if (eq permission.resource 'adoptions')}}selected{{/if}}>Adoções</option>
+                                    <option value="tags" {{#if (eq permission.resource 'tags')}}selected{{/if}}>Tags</option>
+                                    <option value="images" {{#if (eq permission.resource 'images')}}selected{{/if}}>Imagens</option>
+                                    <option value="roles" {{#if (eq permission.resource 'roles')}}selected{{/if}}>Roles</option>
+                                    <option value="permissions" {{#if (eq permission.resource 'permissions')}}selected{{/if}}>Permissões</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione um recurso.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="action" class="form-label">Ação *</label>
+                                <select class="form-select" id="action" name="action" required>
+                                    <option value="">Selecione uma ação</option>
+                                    <option value="create" {{#if (eq permission.action 'create')}}selected{{/if}}>Criar</option>
+                                    <option value="read" {{#if (eq permission.action 'read')}}selected{{/if}}>Ler</option>
+                                    <option value="update" {{#if (eq permission.action 'update')}}selected{{/if}}>Atualizar</option>
+                                    <option value="delete" {{#if (eq permission.action 'delete')}}selected{{/if}}>Deletar</option>
+                                    <option value="manage" {{#if (eq permission.action 'manage')}}selected{{/if}}>Gerenciar (Todas)</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione uma ação.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" maxlength="500">{{permission.description}}</textarea>
+                            <div class="form-text">Descrição opcional da permissão (máximo 500 caracteres)</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/permissions" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação do formulário
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>

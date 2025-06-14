@@ -1,9 +1,7 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
-class Pet extends Model {}
-
-Pet.init({
+const Pet = sequelize.define('Pet', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

@@ -1,0 +1,177 @@
+{{! Show Permission Details }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Detalhes da Permissão</h4>
+                    <div class="btn-group" role="group">
+                        <a href="/permissions" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        <a href="/permissions/{{permission.id}}/edit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> {{error}}
+                    </div>
+                    {{/if}}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Informações Básicas</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-muted">ID</label>
+                                <div class="fw-bold">{{permission.id}}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Nome</label>
+                                <div class="fw-bold">{{permission.name}}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Recurso</label>
+                                <div class="fw-bold">
+                                    <span class="badge bg-info fs-6">{{permission.resource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Ação</label>
+                                <div class="fw-bold">
+                                    {{#if (eq permission.action 'create')}}
+                                        <span class="badge bg-success fs-6">Criar</span>
+                                    {{else if (eq permission.action 'read')}}
+                                        <span class="badge bg-primary fs-6">Ler</span>
+                                    {{else if (eq permission.action 'update')}}
+                                        <span class="badge bg-warning fs-6">Atualizar</span>
+                                    {{else if (eq permission.action 'delete')}}
+                                        <span class="badge bg-danger fs-6">Deletar</span>
+                                    {{else if (eq permission.action 'manage')}}
+                                        <span class="badge bg-dark fs-6">Gerenciar (Todas)</span>
+                                    {{else}}
+                                        <span class="badge bg-secondary fs-6">{{permission.action}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Detalhes Adicionais</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Descrição</label>
+                                <div class="fw-bold">
+                                    {{#if permission.description}}
+                                        {{permission.description}}
+                                    {{else}}
+                                        <span class="text-muted fst-italic">Nenhuma descrição fornecida</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Data de Criação</label>
+                                <div class="fw-bold">{{format-date permission.created_at}}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Última Atualização</label>
+                                <div class="fw-bold">{{format-date permission.updated_at}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{#if permission.roles}}
+                    <hr>
+                    <div class="mt-4">
+                        <h5 class="text-muted">Roles com esta Permissão</h5>
+                        {{#if permission.roles.length}}
+                            <div class="row">
+                                {{#each permission.roles}}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card border-left-primary">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title mb-1">{{this.name}}</h6>
+                                                    <p class="card-text small text-muted">{{this.description}}</p>
+                                                </div>
+                                                <a href="/roles/{{this.id}}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                        {{else}}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> 
+                                Esta permissão ainda não foi atribuída a nenhum role.
+                            </div>
+                        {{/if}}
+                    </div>
+                    {{/if}}
+                </div>
+
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a href="/permissions" class="btn btn-secondary">
+                            <i class="fas fa-list"></i> Ver Todas as Permissões
+                        </a>
+                        <div class="btn-group">
+                            <a href="/permissions/{{permission.id}}/edit" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+                </div>
+                <p>Tem certeza que deseja excluir a permissão <strong>"{{permission.name}}"</strong>?</p>
+                {{#if permission.roles.length}}
+                <p class="text-danger">
+                    <i class="fas fa-info-circle"></i> 
+                    Esta permissão está atribuída a {{permission.roles.length}} role(s) e será removida automaticamente deles.
+                </p>
+                {{/if}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="/permissions/{{permission.id}}/delete" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Confirmar Exclusão
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

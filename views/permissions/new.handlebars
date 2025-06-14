@@ -1,0 +1,186 @@
+{{! Create New Permission }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus"></i> Nova Permissão
+                    </h4>
+                    <a href="/permissions" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> {{error}}
+                    </div>
+                    {{/if}}
+
+                    <form action="/permissions" method="POST" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Nome da Permissão *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{data.name}}" required maxlength="100"
+                                       placeholder="Ex: users.create">
+                                <div class="form-text">
+                                    Use o formato: recurso.ação (ex: users.create, pets.read)
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor, forneça um nome válido para a permissão.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="resource" class="form-label">Recurso *</label>
+                                <select class="form-select" id="resource" name="resource" required>
+                                    <option value="">Selecione um recurso</option>
+                                    <option value="users" {{#if (eq data.resource 'users')}}selected{{/if}}>Usuários</option>
+                                    <option value="pets" {{#if (eq data.resource 'pets')}}selected{{/if}}>Pets</option>
+                                    <option value="shelters" {{#if (eq data.resource 'shelters')}}selected{{/if}}>Abrigos</option>
+                                    <option value="adoptions" {{#if (eq data.resource 'adoptions')}}selected{{/if}}>Adoções</option>
+                                    <option value="tags" {{#if (eq data.resource 'tags')}}selected{{/if}}>Tags</option>
+                                    <option value="images" {{#if (eq data.resource 'images')}}selected{{/if}}>Imagens</option>
+                                    <option value="roles" {{#if (eq data.resource 'roles')}}selected{{/if}}>Roles</option>
+                                    <option value="permissions" {{#if (eq data.resource 'permissions')}}selected{{/if}}>Permissões</option>
+                                    <option value="logs" {{#if (eq data.resource 'logs')}}selected{{/if}}>Logs</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione um recurso.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="action" class="form-label">Ação *</label>
+                                <select class="form-select" id="action" name="action" required>
+                                    <option value="">Selecione uma ação</option>
+                                    <option value="create" {{#if (eq data.action 'create')}}selected{{/if}}>Criar (create)</option>
+                                    <option value="read" {{#if (eq data.action 'read')}}selected{{/if}}>Visualizar (read)</option>
+                                    <option value="update" {{#if (eq data.action 'update')}}selected{{/if}}>Editar (update)</option>
+                                    <option value="delete" {{#if (eq data.action 'delete')}}selected{{/if}}>Excluir (delete)</option>
+                                    <option value="manage" {{#if (eq data.action 'manage')}}selected{{/if}}>Gerenciar (manage)</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione uma ação.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Pré-visualização</label>
+                                <div class="form-control bg-light" id="namePreview">
+                                    <span class="text-muted">Selecione recurso e ação</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                    rows="3" maxlength="500" 
+                                    placeholder="Descreva o que esta permissão permite fazer...">{{data.description}}</textarea>
+                            <div class="form-text">
+                                Explicação clara sobre o que esta permissão permite realizar.
+                            </div>
+                        </div>
+
+                        <!-- Exemplos por categoria -->
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-lightbulb"></i> Exemplos de Permissões
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">CRUD Básico</h6>
+                                        <ul class="small mb-3">
+                                            <li><code>users.create</code> - Criar usuários</li>
+                                            <li><code>pets.read</code> - Visualizar pets</li>
+                                            <li><code>shelters.update</code> - Editar abrigos</li>
+                                            <li><code>adoptions.delete</code> - Excluir adoções</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-success">Gerenciais</h6>
+                                        <ul class="small mb-0">
+                                            <li><code>roles.manage</code> - Gerenciar roles</li>
+                                            <li><code>permissions.manage</code> - Gerenciar permissões</li>
+                                            <li><code>logs.read</code> - Visualizar logs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="/permissions" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Criar Permissão
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-atualizar nome baseado em recurso e ação
+function updateNamePreview() {
+    const resource = document.getElementById('resource').value;
+    const action = document.getElementById('action').value;
+    const nameInput = document.getElementById('name');
+    const preview = document.getElementById('namePreview');
+    
+    if (resource && action) {
+        const suggestedName = `${resource}.${action}`;
+        
+        // Atualizar preview
+        preview.innerHTML = `<span class="text-primary">${suggestedName}</span>`;
+        
+        // Se o campo nome estiver vazio ou seguir o padrão, atualizar
+        if (!nameInput.value || nameInput.value.includes('.')) {
+            nameInput.value = suggestedName;
+        }
+    } else {
+        preview.innerHTML = '<span class="text-muted">Selecione recurso e ação</span>';
+    }
+}
+
+// Event listeners
+document.getElementById('resource').addEventListener('change', updateNamePreview);
+document.getElementById('action').addEventListener('change', updateNamePreview);
+
+// Validação do formulário
+document.querySelector('form').addEventListener('submit', function(e) {
+    const name = document.getElementById('name').value.trim();
+    const resource = document.getElementById('resource').value;
+    const action = document.getElementById('action').value;
+    
+    if (!name || !resource || !action) {
+        e.preventDefault();
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return false;
+    }
+    
+    if (name.length < 3) {
+        e.preventDefault();
+        alert('O nome da permissão deve ter pelo menos 3 caracteres.');
+        return false;
+    }
+});
+
+// Inicializar preview se houver dados
+document.addEventListener('DOMContentLoaded', function() {
+    updateNamePreview();
+});
+</script>
