@@ -1,5 +1,5 @@
-import Role from '../../models/Role.js';
 import Permission from '../../models/Permission.js';
+import Role from '../../models/Role.js';
 import User from '../../models/User.js';
 import { pickFields, ROLE_FIELDS } from '../../utils/sanitizer.js';
 

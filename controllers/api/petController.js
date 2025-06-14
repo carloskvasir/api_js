@@ -1,5 +1,5 @@
 import { Pet, Shelter } from '../../models/index.js';
-import { pickFields, PET_FIELDS } from '../../utils/sanitizer.js';
+import { PET_FIELDS, pickFields } from '../../utils/sanitizer.js';
 
 export const getAllPets = async (req, res) => {
   try {

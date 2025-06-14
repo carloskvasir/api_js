@@ -1,5 +1,5 @@
 import { Permission, Role } from '../../models/index.js';
-import { pickFields, PERMISSION_FIELDS } from '../../utils/sanitizer.js';
+import { PERMISSION_FIELDS, pickFields } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {

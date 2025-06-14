@@ -1,6 +1,6 @@
 import Permission from '../../models/Permission.js';
 import Role from '../../models/Role.js';
-import { pickFields, PERMISSION_FIELDS } from '../../utils/sanitizer.js';
+import { PERMISSION_FIELDS, pickFields } from '../../utils/sanitizer.js';
 
 // Get all permissions
 export const getAllPermissions = async (req, res) => {

@@ -5,8 +5,8 @@ import apiRouter from './routes/api.js';
 import webRouter from './routes/web.js';
 
 // Importar models com associações já configuradas
-import './models/index.js';
 import './config/mongodb.js';
+import './models/index.js';
 
 const app = express();
 

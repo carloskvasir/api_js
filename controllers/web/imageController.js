@@ -1,5 +1,5 @@
 import { Image, Pet } from '../../models/index.js';
-import { pickFields, IMAGE_FIELDS } from '../../utils/sanitizer.js';
+import { IMAGE_FIELDS, pickFields } from '../../utils/sanitizer.js';
 
 // Função helper para validar texto
 const validateText = (text) => {

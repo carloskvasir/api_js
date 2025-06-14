@@ -1,5 +1,5 @@
 import { AdoptionRequest, Pet, User } from '../../models/index.js';
-import { pickFields, ADOPTION_REQUEST_FIELDS } from '../../utils/sanitizer.js';
+import { ADOPTION_REQUEST_FIELDS, pickFields } from '../../utils/sanitizer.js';
 
 export const index = async (req, res) => {
   try {
