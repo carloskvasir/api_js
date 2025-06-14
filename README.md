@@ -11,6 +11,12 @@ This API serves as the backend for a platform that connects animal shelters and 
 - **Node.js** (v18+): JavaScript runtime environment.
 - **Express**: Minimalist framework for building web servers.
 - **JavaScript**: Programming language used in the project.
+- **Swagger**: API documentation and testing.
+
+## API Documentation
+
+The API documentation is generated using Swagger and can be accessed at:
+[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
 ## Database Structure
 
